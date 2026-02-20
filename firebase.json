@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "xpeartz",
+    "public": "out",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

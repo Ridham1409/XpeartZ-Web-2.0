@@ -1,0 +1,16 @@
+﻿
+D:\Xpeartz.com\Agency web 2.0\src\app\not-found.tsx
+  11:21  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  11:42  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+D:\Xpeartz.com\Agency web 2.0\src\app\page.tsx
+  302:22  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+D:\Xpeartz.com\Agency web 2.0\src\app\services\page.tsx
+  123:105  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+D:\Xpeartz.com\Agency web 2.0\src\app\work\[slug]\page.tsx
+  166:51  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+Γ£û 5 problems (5 errors, 0 warnings)
+
