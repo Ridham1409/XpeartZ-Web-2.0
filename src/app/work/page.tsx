@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ProjectCard } from '@/components/ui/Card'
 import { projects } from '@/lib/projects'
@@ -9,17 +9,38 @@ import SectionReveal from '@/components/ui/SectionReveal'
 const CATEGORIES = ['All', 'Food & Cafe', 'Health & Gym', 'Real Estate', 'Corporate & Services', 'E-commerce', 'Beauty & Jewelry'] as const
 const PAGE_SIZE = 15
 
+// Fisher-Yates shuffle
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
 export default function WorkPage() {
   const [active, setActive] = useState<string>('All')
   const [visible, setVisible] = useState(PAGE_SIZE)
+  // New random seed every time 'All' is selected
+  const [shuffleSeed, setShuffleSeed] = useState(() => Math.random())
 
-  const filtered = active === 'All' ? projects : projects.filter(p => p.category === active)
+  const filtered = useMemo(() => {
+    if (active === 'All') {
+      // shuffleSeed is used as dependency so list re-shuffles each time 'All' is clicked
+      void shuffleSeed
+      return shuffle(projects)
+    }
+    return projects.filter(p => p.category === active)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active, shuffleSeed])
+
   const shown = filtered.slice(0, visible)
   const hasMore = visible < filtered.length
 
   function handleCategory(cat: string) {
     setActive(cat)
     setVisible(PAGE_SIZE)
+    if (cat === 'All') setShuffleSeed(Math.random()) // new random order each time All is selected
   }
 
   return (
@@ -30,8 +51,8 @@ export default function WorkPage() {
           <SectionReveal>
             <span className="text-[#4A4AFF] text-sm font-medium tracking-widest uppercase">Our Work</span>
             <h1 className="font-heading text-5xl lg:text-7xl font-bold text-[#F7F7F7] mt-4 mb-6 tracking-tight leading-[1.08]">
-              Projects that<br />
-              <span className="text-gradient-gold">move the needle</span>
+              Portfolio of the<br />
+              <span className="text-gradient-gold">Best Freelance Agency</span>
             </h1>
             <p className="text-[#A0A0A0] text-lg leading-relaxed max-w-2xl">
               A curated selection of branding, web, and mobile projects — each built around a clear strategy and refined through close collaboration.
@@ -74,7 +95,7 @@ export default function WorkPage() {
               className="columns-1 sm:columns-2 md:columns-3 lg:columns-5 gap-5"
             >
               {shown.map((project, i) => (
-                <div key={project.id} className="break-inside-avoid mb-5">
+                <div key={project.id} className="break-inside-avoid mb-5" data-no-cursor="true">
                   <ProjectCard project={project} index={i} />
                 </div>
               ))}

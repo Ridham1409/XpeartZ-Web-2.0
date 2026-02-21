@@ -4,16 +4,12 @@ import { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
 import { ArrowRight, ArrowUpRight, Zap, Palette, Code2, Star } from 'lucide-react'
 import SectionReveal from '@/components/ui/SectionReveal'
 import { ProjectCard } from '@/components/ui/Card'
 import { projects } from '@/lib/projects'
-
-const HeroScene = dynamic(() => import('@/components/three/HeroScene'), {
-  ssr: false,
-  loading: () => <div className="w-full h-full bg-transparent" />,
-})
+import SpotlightCards from '@/components/ui/SpotlightCards'
 
 const benefits = [
   'Professional Digital Solutions Built for Growth',
@@ -72,23 +68,45 @@ export default function HomePage() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
   const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
 
+  // For CTA Banner Spotlight Animation
+  const ctaRef = useRef<HTMLDivElement>(null)
+  const normX = useMotionValue(0.5)
+  const normY = useMotionValue(0.5)
+  const TILT_MAX = 5 // Reduced from 9 since it's a large container
+  const rotateX = useSpring(useTransform(normY, [0, 1], [TILT_MAX, -TILT_MAX]), { stiffness: 300, damping: 28 })
+  const rotateY = useSpring(useTransform(normX, [0, 1], [-TILT_MAX, TILT_MAX]), { stiffness: 300, damping: 28 })
+
+  const handleCtaMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ctaRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    normX.set((e.clientX - rect.left) / rect.width);
+    normY.set((e.clientY - rect.top) / rect.height);
+  }
+
+  // Randomize featured projects on client load to avoid hydration mismatch
+  const [featuredProjects, setFeaturedProjects] = useState(projects.slice(0, 5));
+  useEffect(() => {
+    const shuffled = [...projects].sort(() => 0.5 - Math.random());
+    setFeaturedProjects(shuffled.slice(0, 5));
+  }, []);
+
   return (
     <>
       {/* ═══════════ HERO ═══════════ */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
+      <section id="hero-section" ref={heroRef} className="relative min-h-[90vh] sm:min-h-screen flex items-center overflow-hidden">
+        
         {/* Background glow */}
         <div className="absolute inset-0 bg-hero-glow pointer-events-none" />
-        <div className="absolute top-1/3 right-0 w-[600px] h-[600px] bg-gold-glow pointer-events-none" />
 
-        <div className="container-wide relative z-10 grid lg:grid-cols-2 gap-12 lg:gap-8 items-center pt-28 pb-20 lg:pt-0 lg:pb-0 lg:min-h-screen">
-          {/* Left — text */}
-          <motion.div style={{ opacity: heroOpacity, y: heroY }} className="space-y-8">
+        <div className="container-wide relative z-10 w-full mt-24 sm:mt-32">
+          <motion.div style={{ opacity: heroOpacity, y: heroY }} className="flex flex-col items-center text-center max-w-4xl mx-auto w-full">
             {/* Animated intro tagline */}
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="text-sm font-medium tracking-widest uppercase"
+               className="text-[#4A4AFF] text-sm font-semibold tracking-widest uppercase mb-4"
             >
               Premium Digital Studio for Modern Brands
             </motion.p>
@@ -98,9 +116,9 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.05 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#1A1A1E] border border-[#2A2A2E] text-[#A0A0A0] text-xs font-medium"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1A1A1E] border border-[#2A2A2E] text-[#F7F7F7] text-sm font-medium shadow-[0_4px_24px_rgba(0,0,0,0.2)] mb-6"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#4A4AFF] animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-[#4A4AFF] animate-pulse" />
               Premium Digital Agency — Est. 2026
             </motion.div>
 
@@ -109,13 +127,11 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="font-heading text-5xl sm:text-6xl xl:text-7xl font-bold text-[#F7F7F7] leading-[1.08] tracking-tight"
+              className="font-heading text-6xl sm:text-7xl xl:text-[84px] font-bold text-[#F7F7F7] leading-[1.05] tracking-tight mb-8"
             >
-              We craft{' '}
-              <span className="text-gradient-blue">digital</span>
-              <br />
-              experiences that{' '}
-              <span className="text-gradient-gold">matter</span>
+              The <span className="text-gradient-blue">Best Freelance Agency</span>
+              <br className="hidden sm:block" />
+              for <span className="text-gradient-gold">World-Class</span> Websites
             </motion.h1>
 
             {/* Subheading */}
@@ -123,9 +139,9 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-[#A0A0A0] text-lg leading-relaxed max-w-lg"
+              className="text-[#A0A0A0] text-lg sm:text-xl leading-relaxed max-w-2xl mb-12"
             >
-              We build high-impact websites, intuitive digital products, and strategic branding that drive results — so your business grows faster.
+              As a premium website maker, we build high-impact digital experiences and strategic branding that drive results — helping your brand rank #1.
             </motion.p>
 
             {/* CTAs */}
@@ -133,7 +149,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-3"
+              className="flex flex-col sm:flex-row items-center gap-4 mb-16"
             >
               <Link
                 href="/work"
@@ -159,25 +175,15 @@ export default function HomePage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.5 }}
-              className="space-y-2.5 pt-4 border-t border-[#2A2A2E]"
+              className="flex flex-wrap justify-center gap-6 md:gap-8 pt-8 border-t border-[#2A2A2E] w-full max-w-3xl"
             >
               {benefits.map((b) => (
-                <li key={b} className="flex items-center gap-2.5 text-[#A0A0A0] text-sm">
+                <li key={b} className="flex items-center gap-2.5 text-[#A0A0A0] text-sm md:text-base">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#4A4AFF] shrink-0" />
                   {b}
                 </li>
               ))}
             </motion.ul>
-          </motion.div>
-
-          {/* Right — 3D Scene */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="relative h-[420px] lg:h-[560px]"
-          >
-            <HeroScene />
           </motion.div>
         </div>
 
@@ -207,19 +213,18 @@ export default function HomePage() {
             </div>
           </SectionReveal>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {services.map((s, i) => (
-              <SectionReveal key={s.title} delay={i * 0.1}>
-                <div className="group p-7 rounded-2xl border border-[#2A2A2E] bg-[#1A1A1E] hover:border-[#4A4AFF]/40 transition-all duration-300">
-                  <div className="w-12 h-12 rounded-xl bg-[#4A4AFF]/12 border border-[#4A4AFF]/20 flex items-center justify-center text-[#4A4AFF] mb-6 group-hover:shadow-[0_0_20px_rgba(74,74,255,0.2)] transition-all">
-                    {s.icon}
-                  </div>
-                  <h3 className="font-heading font-semibold text-[#F7F7F7] text-xl mb-3">{s.title}</h3>
-                  <p className="text-[#A0A0A0] text-sm leading-relaxed">{s.desc}</p>
-                </div>
-              </SectionReveal>
-            ))}
-          </div>
+          <SpotlightCards
+            items={services.map((s, i) => ({
+              title: s.title,
+              description: s.desc,
+              icon: i === 0 ? <Code2 size={18} strokeWidth={1.9} color="#4A4AFF" /> : 
+                    i === 1 ? <Palette size={18} strokeWidth={1.9} color="#CC44BB" /> : 
+                    i === 2 ? <Zap size={18} strokeWidth={1.9} color="#EFCB68" /> : 
+                    <ArrowUpRight size={18} strokeWidth={1.9} color="#34d399" />,
+              color: i === 0 ? "#4A4AFF" : i === 1 ? "#CC44BB" : i === 2 ? "#EFCB68" : "#34d399"
+            }))}
+            className="!px-0 !bg-transparent"
+          />
         </div>
       </section>
 
@@ -241,15 +246,35 @@ export default function HomePage() {
           </SectionReveal>
         </div>
         
-        <div className="w-full px-4 md:px-8 lg:px-12 mt-4">
-
-          <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-5 gap-5">
-            {projects.slice(0, 5).map((project, i) => (
-              <div key={project.id} className="break-inside-avoid mb-5">
-                <ProjectCard project={project} index={i} />
-              </div>
+        <div className="w-full max-w-4xl mx-auto mt-4">
+          <ul className="flex flex-col gap-4">
+            {featuredProjects.map((project, i) => (
+              <motion.li 
+                key={project.id}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <Link 
+                  href={`/designs/${project.slug}.html`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="group flex flex-col sm:flex-row sm:items-center justify-between p-6 sm:px-8 sm:py-7 rounded-2xl bg-[#0F0F11]/50 border border-[#2A2A2E] hover:border-[#4A4AFF]/30 hover:bg-[#1A1A1E] transition-all duration-400 block"
+                >
+                  <div className="flex items-center gap-6 mb-4 sm:mb-0">
+                    <span className="text-[#A0A0A0] font-mono text-xs opacity-40 shrink-0">0{i + 1}</span>
+                    <h3 className="font-heading text-lg md:text-xl font-medium text-[#F7F7F7] group-hover:text-white transition-colors">
+                      {project.title}
+                    </h3>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-[#A0A0A0] text-sm group-hover:text-[#F7F7F7] transition-colors">{project.category}</span>
+                  </div>
+                </Link>
+              </motion.li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 
@@ -296,11 +321,24 @@ export default function HomePage() {
       <section className="section-padding border-t border-[#2A2A2E]">
         <div className="container-wide">
           <SectionReveal>
-            <div className="relative rounded-3xl overflow-hidden p-10 md:p-16 lg:p-20 bg-[#1A1A1E] border border-[#2A2A2E]">
+            <motion.div
+              ref={ctaRef}
+              onMouseMove={handleCtaMouseMove}
+              onMouseLeave={() => { normX.set(0.5); normY.set(0.5); }}
+              style={{ rotateX, rotateY, transformPerspective: 1200 }}
+              className="group relative rounded-3xl overflow-hidden p-10 md:p-16 lg:p-20 bg-[#1A1A1E] border border-[#2A2A2E] transition-[border-color] duration-300 hover:border-[#4A4AFF]/40"
+            >
+              {/* Shimmer sweep */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-y-0 left-0 w-[55%] -translate-x-full -skew-x-12 bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-1000 ease-out group-hover:translate-x-[280%]"
+              />
+
               {/* Background */}
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(74,74,255,0.15)_0%,transparent_70%)] pointer-events-none" />
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_40%_at_85%_80%,rgba(239,203,104,0.1)_0%,transparent_70%)] pointer-events-none" />
-              <div className="relative text-center max-w-2xl mx-auto">
+              
+              <div className="relative text-center max-w-2xl mx-auto z-10">
                 <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-[#F7F7F7] tracking-tight mb-4">
                   Ready to build something remarkable?
                 </h2>
@@ -313,10 +351,10 @@ export default function HomePage() {
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link
                     href="/contact"
-                    className="group inline-flex items-center gap-2 px-8 py-4 bg-[#4A4AFF] text-white font-medium rounded-xl hover:bg-[#3B3BDD] hover:shadow-[0_0_30px_rgba(74,74,255,0.5)] transition-all duration-300 text-base"
+                    className="inline-flex items-center gap-2 px-8 py-4 bg-[#4A4AFF] text-white font-medium rounded-xl hover:bg-[#3B3BDD] hover:shadow-[0_0_30px_rgba(74,74,255,0.5)] transition-all duration-300 text-base"
                   >
                     Start a Project
-                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight size={16} />
                   </Link>
                   <Link
                     href="/work"
@@ -326,7 +364,7 @@ export default function HomePage() {
                   </Link>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </SectionReveal>
         </div>
       </section>

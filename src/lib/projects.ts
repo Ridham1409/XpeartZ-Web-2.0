@@ -24,6 +24,61 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    "id": "62",
+    "slug": "clothing-shop-co",
+    "title": "Clothing Shop.co Home",
+    "subtitle": "A premium design for E-commerce",
+    "category": "E-commerce",
+    "thumbnail": "/projects/ecommerce/clothing-shop-co.png",
+    "tags": [
+      "E-commerce",
+      "UI Design",
+      "Web Design"
+    ],
+    "year": "2026",
+    "client": "Clothing Shop.co Home Client",
+    "description": "This is a beautiful E-commerce design tailored to elevate the brand's digital presence.",
+    "problem": "The client needed a modern, responsive, and visually striking digital experience.",
+    "solution": "We crafted a premium interface focusing on high-quality visuals, seamless typography, and intuitive user journeys.",
+    "outcome": "The new design effectively captured the brand essence, leading to higher engagement and a stunning portfolio piece.",
+    "screenshots": [
+      "/projects/ecommerce/clothing-shop-co.png"
+    ]
+  },
+
+  {
+    "id": "premium-1",
+    "slug": "cinematic-cafe-website-design",
+    "title": "Cinematic Café Website Design",
+    "subtitle": "A premium cinematic experience for cafes",
+    "category": "Food & Cafe",
+    "thumbnail": "/projects/food/charts_and_cafe.png",
+    "tags": ["Premium", "Cafe", "Cinematic"],
+    "year": "2026",
+    "client": "Premium Cafe",
+    "description": "An incredibly immersive, cinematic website designed specifically for premium coffee shops and cafes.",
+    "problem": "Generic cafe templates fail to capture the sensory experience of a high-end coffee shop.",
+    "solution": "We created a highly animated, deeply immersive digital environment.",
+    "outcome": "A stunning masterpiece that sets a new standard for cafe websites.",
+    "screenshots": []
+  },
+  {
+    "id": "premium-2",
+    "slug": "premium-restaurant-website",
+    "title": "Premium Restaurant Experience",
+    "subtitle": "High-end dining aesthetic",
+    "category": "Food & Cafe",
+    "thumbnail": "/projects/food/for_cafe.png",
+    "tags": ["Premium", "Restaurant", "Fine Dining"],
+    "year": "2026",
+    "client": "Premium Restaurant",
+    "description": "A dark, elegant, and sophisticated website template for Michelin-star level dining establishments.",
+    "problem": "Fine dining restaurants often have outdated web presences.",
+    "solution": "A sleek, photography-first design with smooth scroll interactions.",
+    "outcome": "Elevated brand perception matching the quality of the food.",
+    "screenshots": []
+  },
+  {
     "id": "1",
     "slug": "artisan-bean-cafe-home",
     "title": "Artisan Bean Cafe Home",
@@ -307,28 +362,6 @@ export const projects: Project[] = [
     "outcome": "The new design effectively captured the brand essence, leading to higher engagement and a stunning portfolio piece.",
     "screenshots": [
       "/projects/health/apex_fitness_hub_home.webp"
-    ]
-  },
-  {
-    "id": "14",
-    "slug": "screen",
-    "title": "Screen",
-    "subtitle": "A premium design for Health & Gym",
-    "category": "Health & Gym",
-    "thumbnail": "/projects/health/screen.webp",
-    "tags": [
-      "Health & Gym",
-      "UI Design",
-      "Web Design"
-    ],
-    "year": "2026",
-    "client": "Screen Client",
-    "description": "This is a beautiful Health & Gym design tailored to elevate the brand's digital presence.",
-    "problem": "The client needed a modern, responsive, and visually striking digital experience.",
-    "solution": "We crafted a premium interface focusing on high-quality visuals, seamless typography, and intuitive user journeys.",
-    "outcome": "The new design effectively captured the brand essence, leading to higher engagement and a stunning portfolio piece.",
-    "screenshots": [
-      "/projects/health/screen.webp"
     ]
   },
   {

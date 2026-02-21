@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>SHOP.CO - Find Clothes That Match Your Style</title>
+    
+    <!-- External Scripts & Styles -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Archivo+Black&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+    <!-- React Dependencies -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#141414",
+                        secondary: "#ec5b13",
+                        "background-light": "#FFFFFF",
+                        "background-dark": "#0F0F0F",
+                        "surface-light": "#F2F0F1",
+                        "surface-dark": "#1A1A1A",
+                    },
+                    fontFamily: {
+                        sans: ["'Plus Jakarta Sans'", "sans-serif"],
+                        display: ["'Archivo Black'", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        'md': "0.375rem",
+                        'xl': "1rem",
+                        '2xl': "1.25rem",
+                        '3xl': "1.5rem",
+                        '4xl': "2rem",
+                        '5xl': "3rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-display { font-family: 'Archivo Black', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-black dark:text-white transition-colors duration-200">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { createRoot } = ReactDOM;
+        const { MemoryRouter, Routes, Route, Link, useNavigate, useLocation } = ReactRouterDOM;
+
+        // --- Common Components ---
+
+        const TopBanner = () => (
+            <div class="bg-black text-white text-xs sm:text-sm py-2 text-center relative z-50">
+                <p class="inline-block px-4">Sign up and get 20% off to your first order. <a class="underline font-medium hover:text-gray-300" href="#">Sign Up Now</a></p>
+                <button class="absolute right-4 top-1/2 -translate-y-1/2 hidden sm:block hover:text-gray-300">
+                    <span class="material-icons-outlined text-base">close</span>
+                </button>
+            </div>
+        );
+
+        const Navbar = () => {
+            const navigate = useNavigate();
+            return (
+                <nav class="bg-background-light dark:bg-background-dark border-b border-gray-100 dark:border-gray-800 sticky top-0 z-40">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="flex items-center justify-between h-20 gap-4 lg:gap-8">
+                            <button class="lg:hidden p-2 text-gray-600 dark:text-gray-300">
+                                <span class="material-icons-outlined">menu</span>
+                            </button>
+                            <Link to="/" class="font-display text-2xl sm:text-3xl font-black tracking-tighter shrink-0">SHOP.CO</Link>
+                            <div class="hidden lg:flex items-center space-x-6 text-sm font-medium whitespace-nowrap">
+                                <Link to="/category" class="flex items-center hover:text-gray-600 dark:hover:text-gray-300">Shop <span class="material-icons-outlined text-base ml-1">keyboard_arrow_down</span></Link>
+                                <a class="hover:text-gray-600 dark:hover:text-gray-300" href="#">On Sale</a>
+                                <a class="hover:text-gray-600 dark:hover:text-gray-300" href="#">New Arrivals</a>
+                                <a class="hover:text-gray-600 dark:hover:text-gray-300" href="#">Brands</a>
+                            </div>
+                            <div class="hidden sm:flex flex-1 max-w-lg bg-surface-light dark:bg-surface-dark rounded-full px-4 py-3 items-center">
+                                <span class="material-icons-outlined text-gray-400">search</span>
+                                <input class="bg-transparent border-none focus:ring-0 text-sm w-full ml-2 text-gray-800 dark:text-gray-200 placeholder-gray-500" placeholder="Search for products..." type="text"/>
+                            </div>
+                            <div class="flex items-center space-x-4 shrink-0">
+                                <button class="sm:hidden text-gray-800 dark:text-gray-200">
+                                    <span class="material-icons-outlined">search</span>
+                                </button>
+                                <Link to="/cart" class="text-gray-800 dark:text-gray-200 hover:opacity-70">
+                                    <span class="material-icons-outlined">shopping_cart</span>
+                                </Link>
+                                <a class="text-gray-800 dark:text-gray-200 hover:opacity-70" href="#">
+                                    <span class="material-icons-outlined">account_circle</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            );
+        };
+
+        const Footer = () => (
+            <footer class="bg-surface-light dark:bg-surface-dark pt-32 pb-10 relative mt-20">
+                <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[90%] max-w-7xl bg-black rounded-[1.5rem] px-6 py-8 sm:px-12 sm:py-10 flex flex-col md:flex-row justify-between items-center gap-8">
+                    <h2 class="font-display text-white text-3xl sm:text-4xl font-black md:max-w-lg leading-tight text-center md:text-left uppercase">
+                        STAY UPTO DATE ABOUT OUR LATEST OFFERS
+                    </h2>
+                    <div class="w-full md:w-auto flex flex-col gap-3">
+                        <div class="bg-white rounded-full px-4 py-3 flex items-center w-full md:w-80">
+                            <span class="material-icons-outlined text-gray-400 mr-2">email</span>
+                            <input class="outline-none text-sm text-gray-800 placeholder-gray-400 w-full border-none focus:ring-0 p-0" placeholder="Enter your email address" type="email"/>
+                        </div>
+                        <button class="bg-white text-black font-medium rounded-full px-4 py-3 text-sm w-full md:w-80 hover:bg-gray-100 transition-colors">
+                            Subscribe to Newsletter
+                        </button>
+                    </div>
+                </div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b border-gray-200 dark:border-gray-700 pb-12">
+                        <div class="col-span-2 md:col-span-1 pr-4">
+                            <Link to="/" class="font-display text-3xl font-black tracking-tighter mb-6 block uppercase">SHOP.CO</Link>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm mb-6 leading-relaxed">
+                                We have clothes that suits your style and which you're proud to wear. From women to men.
+                            </p>
+                            <div class="flex gap-3">
+                                {['twitter', 'facebook', 'instagram', 'github'].map(social => (
+                                    <a key={social} class="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-full p-2 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors" href="#">
+                                        <span class="material-icons-outlined text-base">public</span>
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                        {['Company', 'Help', 'FAQ', 'Resources'].map(cat => (
+                            <div key={cat}>
+                                <h3 class="font-bold tracking-widest uppercase mb-4 text-sm">{cat}</h3>
+                                <ul class="space-y-3 text-gray-500 dark:text-gray-400 text-sm">
+                                    <li><a class="hover:underline" href="#">Link 1</a></li>
+                                    <li><a class="hover:underline" href="#">Link 2</a></li>
+                                    <li><a class="hover:underline" href="#">Link 3</a></li>
+                                    <li><a class="hover:underline" href="#">Link 4</a></li>
+                                </ul>
+                            </div>
+                        ))}
+                    </div>
+                    <div class="pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Shop.co © 2000-2023, All Rights Reserved</p>
+                        <div class="flex gap-2 opacity-80">
+                            {[1, 2, 3, 4, 5].map(i => (
+                                <div key={i} class="bg-white rounded p-1 h-6 w-10 flex items-center justify-center border border-gray-200">
+                                    <div class="w-full h-2 bg-gray-200 rounded"></div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        );
+
+        // --- Screen 1: Home ---
+        const HomePage = () => {
+            const navigate = useNavigate();
+            return (
+                <div>
+                    <header class="bg-surface-light dark:bg-surface-dark pt-10 sm:pt-16 overflow-hidden relative">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                            <div class="grid lg:grid-cols-2 gap-8 items-center">
+                                <div class="z-10 relative pb-10">
+                                    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl lg:text-[64px] leading-none uppercase font-black mb-6">
+                                        Find Clothes <br/> That Matches <br/> Your Style
+                                    </h1>
+                                    <p class="text-gray-600 dark:text-gray-400 text-sm sm:text-base mb-8 max-w-md leading-relaxed">
+                                        Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style.
+                                    </p>
+                                    <Link to="/category" class="inline-block bg-primary dark:bg-white dark:text-black text-white px-12 py-4 rounded-full font-medium hover:opacity-90 transition-opacity w-full sm:w-auto text-center">
+                                        Shop Now
+                                    </Link>
+                                    <div class="flex flex-wrap items-center gap-6 sm:gap-12 mt-10 sm:mt-12 border-t sm:border-none border-gray-200 dark:border-gray-700 pt-6 sm:pt-0">
+                                        <div><p class="text-2xl sm:text-3xl font-bold font-display">200+</p><p class="text-xs text-gray-500 dark:text-gray-400 mt-1">International Brands</p></div>
+                                        <div class="w-px h-12 bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+                                        <div><p class="text-2xl sm:text-3xl font-bold font-display">2,000+</p><p class="text-xs text-gray-500 dark:text-gray-400 mt-1">High-Quality Products</p></div>
+                                        <div class="w-px h-12 bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+                                        <div><p class="text-2xl sm:text-3xl font-bold font-display">30,000+</p><p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Happy Customers</p></div>
+                                    </div>
+                                </div>
+                                <div class="relative lg:h-[600px] flex items-end justify-center">
+                                    <img alt="Hero" class="relative z-10 max-h-[500px] lg:max-h-[600px] object-contain object-bottom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClE9zso2v4pDSNOE5Y8qKuTNOxSGsZ2xdeBevY8Zj32pelyBv27lX2DVajwCs-_eMwjIjY2lh4CTy3c3Cw5AUqEYIcTGYGGJtTtvU0TmHUBOBVzJecA1BYvdbZase5Q23LjrqZj6PS-3Y_mR7FVMZYP_WoxwOPCDCgr9QymzmfHlrbSgZsafpFb6I0w0zIx3zkyD7KDE8pNJaSftHHiVSzRxcEJ47x7KrKyi1LIzWeXZuWqpkM97hvPbVeTpCJMO6dP9sWhnDOxzU"/>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="bg-black py-8">
+                        <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-8 grayscale opacity-80 text-white font-serif italic text-xl">
+                            <span>VERSACE</span><span>ZARA</span><span>GUCCI</span><span>PRADA</span><span>Calvin Klein</span>
+                        </div>
+                    </div>
+                    {/* New Arrivals Section */}
+                    <section class="py-16 sm:py-20 border-b border-gray-100 dark:border-gray-800">
+                        <div class="max-w-7xl mx-auto px-4">
+                            <h2 class="font-display text-3xl sm:text-5xl font-black text-center mb-12 uppercase">New Arrivals</h2>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
+                                {[
+                                    {id: 1, name: 'T-shirt with Tape Details', price: 120, rating: '4.5/5', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB6FX1bR9sZ7tuuDqY39x-PUmuwWa3HLI88JMK_2ww7N0dxA0g5Ye5V_8wVF6YnJ95Gaein3yKqqzXHR2LqvnGKRmbo-OQ1loFwj2Cm-6Zirhj2_pOFfUJaTrTkQ4DiLfUz6NZMq1sE0JXXVx9TEUcIIjVtiYEoww5Yh4llYzXahJzxyepdPnRctR4UAjIA8GN6w_ym53q2VJyoQHAFnuT87fwwHAHOcPlxzWPIysgg8OULoWGtpmBBKTajTHSfvj8AVc-RI9gKUK4'},
+                                    {id: 2, name: 'Skinny Fit Jeans', price: 240, oldPrice: 260, discount: '-20%', rating: '3.5/5', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBdPjysGvE5_NvNr2ZpU7NPbdrZYwCYqeCgIUzMTruEFC8ikA7OrYQOYypgsVW_f5k9Jp6BOoLYVADN-UAuy4Tf4L8W4MC6Qhebt4otcIE0r82QupIxKHN3rPnvUeqDZTbnquFNaTdqtoP2z8PV27vzfbzrKntsocEDCd12qD5cWOLZT_uzLPd8hKJusbI-phzoBvcZ7d6JVR13amqEJRo52SqJBqhhbAApvs8RO5jWc4odVaMhPsM3F68rvgTC7bYsUOA5GkzjjZw'},
+                                    {id: 3, name: 'Checkered Shirt', price: 180, rating: '4.5/5', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDNqEZ3XqNNC9TKV9QIMvHgMVEEG7RlkXC-h5SVnqR459MEeUy1LGQekAPBrVnY-Seq9K_8mxkFCMLaGDQaIdHWWmbJgrCrhkL9cGETKxghFloz9Wgo2qwVGnORdH7zMOG9No9K62D2GpZ7iZRKN4F9bB32NZ28UF4QCvLy_yzHw0c_U4Hpxzh6O9T4gqaJzBPPgTc7cGB2ezyIFLqUcCBtISkwOus_mf1O620fwdy4NQSH2-RsWPE3G0NMc0dLxyPNB-kSuweYC54'},
+                                    {id: 4, name: 'Sleeve Striped T-shirt', price: 130, oldPrice: 160, discount: '-30%', rating: '4.5/5', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDr-PY5V2bYrCPLiQ-fsT_-XnuRanfCBNXLoWhIhKSul18fmmVkeYSKhnntlMzrIWkRYNR_al-Dxwqz13e2EACxDuU8IR34yqvl1cVcfa4lScI2LXZEoYx-M4_HjLCvdxKm2H1tzxO1tw_nM3lFVOqC2tJPDvYPddiPCFZ7CDtJ345hWu-jLRNogqZNpplaDlGFblqoBy6lhPjxSI2TbVAr_PezweaYSMtmzcLcKKluuNisO7bvCx9OtbE88Jen0ppnAZj4KASGJmg'}
+                                ].map(product => (
+                                    <div key={product.id} onClick={() => navigate('/product')} class="group cursor-pointer">
+                                        <div class="bg-surface-light dark:bg-surface-dark rounded-[1.5rem] p-4 mb-4 aspect-square flex items-center justify-center overflow-hidden">
+                                            <img alt={product.name} class="object-cover w-full h-full mix-blend-multiply dark:mix-blend-normal" src={product.img}/>
+                                        </div>
+                                        <h3 class="font-bold text-base sm:text-lg mb-1 truncate">{product.name}</h3>
+                                        <div class="flex items-center mb-2">
+                                            <span class="text-yellow-400 text-sm material-icons-outlined">star</span>
+                                            <span class="text-xs text-gray-500 ml-2">{product.rating}</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <p class="font-bold text-xl">${product.price}</p>
+                                            {product.oldPrice && <p class="text-gray-400 line-through font-bold text-xl">${product.oldPrice}</p>}
+                                            {product.discount && <span class="bg-red-100 text-red-600 text-xs font-medium px-2 py-1 rounded-full">{product.discount}</span>}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div class="mt-10 text-center">
+                                <Link to="/category" class="inline-block border border-gray-200 dark:border-gray-700 rounded-full px-12 py-3 text-sm font-medium hover:bg-black hover:text-white transition-colors">View All</Link>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+        };
+
+        // --- Screen 2: Category ---
+        const CategoryPage = () => {
+            const navigate = useNavigate();
+            return (
+                <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+                    <div class="py-6 flex items-center gap-2 text-sm text-gray-500">
+                        <Link to="/" class="hover:text-black">Home</Link>
+                        <span class="material-icons-outlined text-base">chevron_right</span>
+                        <span class="text-black font-medium">Casual</span>
+                    </div>
+                    <div class="flex flex-col lg:flex-row gap-8">
+                        <aside class="hidden lg:block w-72 shrink-0 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 h-fit">
+                            <div class="flex items-center justify-between mb-6 pb-6 border-b border-gray-200">
+                                <h3 class="text-xl font-bold font-display uppercase">Filters</h3>
+                                <span class="material-icons-outlined">tune</span>
+                            </div>
+                            <div class="space-y-4 mb-6 pb-6 border-b border-gray-200 text-gray-500">
+                                {['T-shirts', 'Shorts', 'Shirts', 'Hoodies', 'Jeans'].map(cat => (
+                                    <div key={cat} class="flex items-center justify-between cursor-pointer hover:text-black">
+                                        <span>{cat}</span><span class="material-icons-outlined text-sm">chevron_right</span>
+                                    </div>
+                                ))}
+                            </div>
+                            <div class="mb-6 pb-6 border-b border-gray-200">
+                                <h4 class="font-bold text-lg mb-4">Price</h4>
+                                <input class="w-full accent-black" type="range" />
+                                <div class="flex justify-between mt-2 text-sm">$50 - $200</div>
+                            </div>
+                            <button class="w-full bg-black text-white py-3 rounded-full font-medium transition hover:opacity-90">Apply Filter</button>
+                        </aside>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-2xl md:text-3xl font-display font-bold uppercase">Casual</h2>
+                                <div class="flex items-center gap-2 text-sm text-gray-500">
+                                    <span class="hidden md:inline">Showing 1-10 of 100 Products</span>
+                                    <select class="bg-transparent font-medium text-black border-none focus:ring-0 cursor-pointer">
+                                        <option>Most Popular</option>
+                                        <option>Newest</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                                {[
+                                    {id: 1, name: 'Gradient Graphic T-shirt', price: 145, img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB9GyKN12MPPU3xJlCZ9Aw9C753FeBfVnFeRGEB5zuyQkXK-vkrtqaqOqe1F51laFywcVjlKc6m1FlHC2jMjxZSIch0rAzDXhnvLkC-EQzD_SSc46B65Cvxhlf6gKChza_pOQTjetu4I2A-6nMpVXMKFfknxA-yGeYtOgzhAoEa9eqDul_NsbQ-pMGKsSq5fHJZsPBKHFjYROM2gpci5d_Oxq4YNYJwKH8SjnXOtpuD7OGKA9ZDiEhh4N5GgL68m6FO3sm2ycavVe4'},
+                                    {id: 2, name: 'Polo with Tipping Details', price: 180, img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDjdbplSRhkF4SUDBb_iDphl_53Lka6nXOD2TkOKwgIoaOD4zL1HDWqYUecONWyfaNkB3PAE1E7HsKD80IziOnOlzTjDe1MsWLGtMuHslD4TR8aNqIpDeU7aZfYhBUm_zMBnu85sqrrFFn6togh77Asd_p6VX3YRuV8Dc8XT7-1nRXY1hGcV6LN0icmgqTYbtg_ii09Okqr4LtqNXOBAItCueLEINPXh65zzpmhFLGO5-VXS_F_t_F7076jE4k9D5AAuQV7F3tfh_w'},
+                                    {id: 3, name: 'Black Striped T-shirt', price: 120, oldPrice: 150, img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDMp3JzaGpN-ZfUfSMMibOvTNE8dY5e9cQRIRsgsjbiFHLIFmkVHVhkKzDbooNUJZa28LsPXBdY8N6pLFHoL7OYGAFFrYctYtc8GphOZhwr3mmBqJmYd5kzysfM49i8ZGs1YjyRsUUDiZO19MRKxiOphXSx4mOHwdvHEuw2fWV28lS91vMIA1O0KP0Xu89BHYQCx3L5ehdBAAHbHq83w7WEgGleeMUAEpdk4qUnWpMerSywqDVqzaIBbbt66ZCGCpJx5PFUOZ2zq28'},
+                                    {id: 4, name: 'Skinny Fit Jeans', price: 240, img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDPiR8dhc_nUZ2sGze3kIoXcArOoJ0e8gV_9VTeB68LGLPPuWHsfPHcAOSdY7sfJD35sEDc6KdCou6EBOK2B5iL341hk_uP5Ol7ovK6kkuadazXsOY6ISP9eLHM5qcxLW9XbVFH35J7lJB3Y3J0BjHCHaOnTzLv5I9cL-NUroUmpINp6QCloYPyikAdgfmwQseV_oDAY5eY_barzj6h0Cfs-FK8UTAQsCjhkExJqVyiy00pVHq2FFmQ7EwiJ--tsC02g_8cFFwtGVQ'},
+                                    {id: 5, name: 'Checkered Shirt', price: 180, img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA5e-rMaLmFM5gVZIcEmcHbN7861sU52PamSAxez1cvBnHGJCUkT7WE56g7W8GlTEIZ5hUsyWCu3rhYg1fQTo-T050Vu-n2omP9AXjUfBXmWeUlomURUdrBRTqiD_UDQslrVmPd-wPbWQE_NRijmHA-DHC6bkz1K70rKXOUl6dl1N_xKxMIBbZ2x_rNwwymPWKba3Wthm6VKvBTnlt3SEJa9OSwMVvpnSp0w4woT20A-nG8OTqDmNWnL0kqH40ikcDOzGPKO4bWFzE'},
+                                    {id: 6, name: 'Sleeve Striped T-shirt', price: 130, img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDOcBPqFJmcEBZs5f9rWWrKCz8cO4MKDaGrz17foozyQS77W93kkLVJ1xt1ub0OxcFWWWKo9kdaeCrmxV5FeR0dhngPcnObHfk11zu7L0RkKR1AIanH1yjufO2KKFQJCglvpRoqZewrbhcDi5a-0-PY32KMop-MlP2pNS3AMS4GjrNNPJs1bVOBu7Wvchos2WkmLP9mACrNKzIHMVfjbNs4VPhotsckH62603K9AXydNEluU5vExiim5siC7TaLLrzuP-gt8ZMfg3M'}
+                                ].map(p => (
+                                    <div key={p.id} onClick={() => navigate('/product')} class="group cursor-pointer">
+                                        <div class="aspect-square bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden mb-4 relative">
+                                            <img alt={p.name} class="w-full h-full object-cover group-hover:scale-105 transition duration-300" src={p.img}/>
+                                        </div>
+                                        <h3 class="font-bold text-base md:text-lg mb-1 truncate">{p.name}</h3>
+                                        <div class="flex items-center gap-1 mb-2">
+                                            <span class="material-icons-outlined text-rating-star text-base text-yellow-400">star</span>
+                                            <span class="text-xs text-gray-500">4.5/5</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-bold text-lg md:text-2xl">${p.price}</span>
+                                            {p.oldPrice && <span class="text-gray-400 line-through font-bold">${p.oldPrice}</span>}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            );
+        };
+
+        // --- Screen 3: Product ---
+        const ProductPage = () => {
+            const navigate = useNavigate();
+            return (
+                <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-6">
+                        <Link to="/" class="hover:text-black">Home</Link>
+                        <span class="material-icons-outlined text-xs">chevron_right</span>
+                        <Link to="/category" class="hover:text-black">Shop</Link>
+                        <span class="material-icons-outlined text-xs">chevron_right</span>
+                        <span class="text-black font-medium">One Life Graphic T-shirt</span>
+                    </div>
+                    <div class="lg:grid lg:grid-cols-2 lg:gap-10 mb-16">
+                        <div class="flex flex-col-reverse lg:flex-row gap-4">
+                            <div class="flex lg:flex-col gap-3 shrink-0 lg:w-32">
+                                {[1, 2, 3].map(i => (
+                                    <div key={i} class="border border-transparent hover:border-black rounded-2xl overflow-hidden aspect-square lg:aspect-[3/4] bg-surface-light">
+                                        <img alt="thumb" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDj_6gdR9W0cXAEL4a5mWvNj4kOfMlDqqa1K1a9KSyy4ceOp5XDC9MckasDAPQV-MeAdqZyfB3ypx7BJbFuIS4W5qbchE3hHZvePIM5awWi9103v7ZnI9F69QHSTQY5M8i0rdqPlYPL0xuPr_hTtUdqYh95U_3eyAAs6qbNA2wHvbwlrGksOyXYqmHWPqdCEWfQwBt5bfTwlwYwzJvc9tn1MBZWB3A9PuTY8XukqMzqA9dMyn9B88RkjnyEB7LyqcmUufzpH6vjbKs"/>
+                                    </div>
+                                ))}
+                            </div>
+                            <div class="flex-1 rounded-2xl overflow-hidden bg-surface-light aspect-[3/4] h-full">
+                                <img alt="main" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBr-eVPWnzWhHSUQTZeloSy3ECng3Sqv6If0UI0MaCC8UNxWGbp3Zm5IajdPhyj6ZTxYUtJitUaWW2PCiPxTpeiayimPXVP9zLSUVvv9BBvHPGNAiXMSER5Hn7LNAHhsXivjKViWzGGzYSc3Zgdv9xOopu4sbGA9vywvSeJLJrfCnkY4Uw3gEoywvb2ccSmr1N4LdRlbBhq_RMHcYZcJ6et_1CiSRpW8XkyKsSH01IP5r0TdR1KoXIUypDJILZekXF0lYar42cDLCk"/>
+                            </div>
+                        </div>
+                        <div class="mt-8 lg:mt-0">
+                            <h1 class="text-3xl lg:text-4xl font-black uppercase mb-3 font-display">One Life Graphic T-shirt</h1>
+                            <div class="flex items-center space-x-2 mb-4">
+                                <div class="flex text-yellow-400">
+                                    <span class="material-icons-outlined">star</span><span class="material-icons-outlined">star</span><span class="material-icons-outlined">star</span><span class="material-icons-outlined">star</span><span class="material-icons-outlined">star_half</span>
+                                </div>
+                                <span class="text-sm text-gray-600">4.5/5</span>
+                            </div>
+                            <div class="flex items-center space-x-3 mb-6">
+                                <span class="text-3xl font-bold">$260</span>
+                                <span class="text-3xl font-bold text-gray-400 line-through">$300</span>
+                                <span class="bg-red-100 text-red-600 text-sm font-medium px-3 py-1 rounded-full">-40%</span>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+                                This graphic t-shirt is perfect for any occasion. Crafted from a soft and breathable fabric, it offers superior comfort and style.
+                            </p>
+                            <hr class="mb-6 border-gray-100 dark:border-gray-800"/>
+                            <div class="mb-6">
+                                <span class="block text-sm text-gray-500 mb-3">Select Colors</span>
+                                <div class="flex space-x-3">
+                                    <button class="w-9 h-9 rounded-full bg-[#4F4631] border-2 border-white ring-1 ring-black"></button>
+                                    <button class="w-9 h-9 rounded-full bg-[#314F4A]"></button>
+                                    <button class="w-9 h-9 rounded-full bg-[#31344F]"></button>
+                                </div>
+                            </div>
+                            <div class="mb-8">
+                                <span class="block text-sm text-gray-500 mb-3">Choose Size</span>
+                                <div class="flex flex-wrap gap-3">
+                                    {['Small', 'Medium', 'Large', 'X-Large'].map(size => (
+                                        <button key={size} class={`px-6 py-2.5 rounded-full text-sm ${size === 'Large' ? 'bg-black text-white' : 'bg-surface-light text-gray-600 hover:bg-gray-200'}`}>{size}</button>
+                                    ))}
+                                </div>
+                            </div>
+                            <div class="flex space-x-4">
+                                <div class="flex items-center bg-surface-light rounded-full px-4 py-3 space-x-6">
+                                    <button class="hover:text-primary"><span class="material-icons-outlined text-base">remove</span></button>
+                                    <span class="font-medium">1</span>
+                                    <button class="hover:text-primary"><span class="material-icons-outlined text-base">add</span></button>
+                                </div>
+                                <button onClick={() => navigate('/cart')} class="flex-1 bg-black text-white font-medium rounded-full py-3 hover:opacity-90">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            );
+        };
+
+        // --- Screen 4: Cart ---
+        const CartPage = () => (
+            <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+                <nav class="flex mb-8 text-sm text-gray-500">
+                    <Link to="/" class="hover:text-black">Home</Link>
+                    <span class="material-icons-outlined text-xs mx-1">chevron_right</span>
+                    <span class="font-semibold text-black dark:text-white">Cart</span>
+                </nav>
+                <h1 class="text-3xl md:text-4xl font-black mb-10 tracking-tight font-display uppercase">YOUR CART</h1>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 space-y-4">
+                        <div class="bg-white dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+                            {[
+                                { id: 1, name: 'Gradient Graphic T-shirt', size: 'Large', color: 'White', price: 145, img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDqw1J3z-YhUZUXIzTuNyMzpopRXPLridxUdYchwzeHGiOYYMvTciFduz7v3rOVWJb12XeSJ7JMoac4CFuBta8PTzllV7CpsfjHQg2FUR1NtNx05agKmU-DoV6kw3VlzGswmPdBwiiwA7B8-RlaSVfDxPxV2iKc_v04Tr43VzTGONxeIl4stLaHh_mTIz_D9hkKBo-ptlbQa7lrLzIXXXjnS0KsJVQ6qvMG6BCMRYFy7DiP4bJsWKmf6RrGR3RO3tNcY2jDazVX58Y' },
+                                { id: 2, name: 'Checkered Shirt', size: 'Medium', color: 'Red', price: 180, img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDDCK7I5Jz0_R8t-acusp9ZJKBz0c7oh9MeAKoEt5xttTN8PuZybQivKQWbSI3IEDp8Z-5uUtOyEVoq-2CF_E7osYhEJQjbXK-zFxRmonhwgObVKbMr7WpTRO5cy7o25nfgbL7D_JWJQNKXaXTQdqh9Htgla6hi0bdwcRLNjtvMUGvSCz1iABGwqqPhna6rnbaOS8flNlDxgFUVSemBWpvCefCenqiN6NUS09FHdtmAN8HFYuWxU_Uw1zdbV_GIJa8llcyofTth7LA' }
+                            ].map(item => (
+                                <div key={item.id} class="p-4 md:p-6 flex gap-4 md:gap-6 border-b border-gray-100 dark:border-gray-800 last:border-0">
+                                    <div class="w-24 h-24 md:w-32 md:h-32 bg-gray-100 rounded-lg overflow-hidden shrink-0">
+                                        <img class="w-full h-full object-cover" src={item.img}/>
+                                    </div>
+                                    <div class="flex-1 flex flex-col justify-between">
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <h3 class="text-lg font-bold">{item.name}</h3>
+                                                <p class="text-sm text-gray-500">Size: {item.size}</p>
+                                                <p class="text-sm text-gray-500">Color: {item.color}</p>
+                                            </div>
+                                            <button class="text-red-500 hover:text-red-600"><span class="material-icons-outlined">delete</span></button>
+                                        </div>
+                                        <div class="flex justify-between items-center mt-4">
+                                            <span class="text-xl font-bold">${item.price}</span>
+                                            <div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1">
+                                                <button class="p-1"><span class="material-icons-outlined text-lg">remove</span></button>
+                                                <span class="mx-4 font-medium">1</span>
+                                                <button class="p-1"><span class="material-icons-outlined text-lg">add</span></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div class="lg:col-span-1">
+                        <div class="bg-white dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-gray-800 p-6 sticky top-24">
+                            <h2 class="text-xl font-bold mb-6">Order Summary</h2>
+                            <div class="space-y-4 mb-6">
+                                <div class="flex justify-between text-gray-500"><span>Subtotal</span><span class="font-bold text-black dark:text-white">$325</span></div>
+                                <div class="flex justify-between text-gray-500"><span>Discount (-20%)</span><span class="font-bold text-red-500">-$65</span></div>
+                                <div class="flex justify-between text-gray-500"><span>Delivery Fee</span><span class="font-bold text-black dark:text-white">$15</span></div>
+                                <hr class="border-gray-100 dark:border-gray-800"/>
+                                <div class="flex justify-between text-lg font-bold"><span>Total</span><span>$275</span></div>
+                            </div>
+                            <button class="w-full py-4 bg-black text-white rounded-full font-bold flex items-center justify-center gap-2 hover:opacity-90">
+                                Go to Checkout <span class="material-icons-outlined">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        );
+
+        // --- Layout Wrap ---
+        const AppLayout = ({ children }) => {
+            const { pathname } = useLocation();
+            useEffect(() => {
+                window.scrollTo(0, 0);
+            }, [pathname]);
+
+            return (
+                <div class="min-h-screen flex flex-col">
+                    <TopBanner />
+                    <Navbar />
+                    <div class="flex-grow">
+                        {children}
+                    </div>
+                    <Footer />
+                </div>
+            );
+        };
+
+        const App = () => {
+            return (
+                <MemoryRouter>
+                    <AppLayout>
+                        <Routes>
+                            <Route path="/" element={<HomePage />} />
+                            <Route path="/category" element={<CategoryPage />} />
+                            <Route path="/product" element={<ProductPage />} />
+                            <Route path="/cart" element={<CartPage />} />
+                        </Routes>
+                    </AppLayout>
+                </MemoryRouter>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

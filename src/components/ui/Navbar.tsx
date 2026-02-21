@@ -47,19 +47,21 @@ export default function Navbar() {
           }}
           className={cn(
             'w-full max-w-5xl flex items-center justify-between relative',
-            'h-[64px] px-5 rounded-full',
+            'h-[80px] px-6 rounded-full',
             'transition-all duration-500',
-            // Layered glass effect
             scrolled
-              ? 'shadow-[0_8px_48px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.06)]'
-              : 'shadow-[0_4px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.04)]'
+              ? 'shadow-[0_8px_60px_rgba(0,0,0,0.7),0_0_40px_rgba(74,74,255,0.12),inset_0_1px_0_rgba(255,255,255,0.08)]'
+              : 'shadow-[0_4px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.05)]'
           )}
           style={{
-            backdropFilter: 'blur(24px) saturate(200%) brightness(0.85)',
-            WebkitBackdropFilter: 'blur(24px) saturate(200%) brightness(0.85)',
+            backdropFilter: 'blur(28px) saturate(200%) brightness(0.85)',
+            WebkitBackdropFilter: 'blur(28px) saturate(200%) brightness(0.85)',
             background: scrolled
-              ? 'rgba(15, 15, 17, 0.72)'
-              : 'rgba(15, 15, 17, 0.52)',
+              ? 'rgba(15, 15, 17, 0.80)'
+              : 'rgba(15, 15, 17, 0.55)',
+            border: scrolled
+              ? '1px solid rgba(74,74,255,0.25)'
+              : '1px solid rgba(255,255,255,0.06)',
           }}
         >
           {/* Subtle inner top highlight — glass edge feel */}
@@ -74,8 +76,8 @@ export default function Navbar() {
             <Image
               src="/logo.png"
               alt="Xpeartz"
-              width={130}
-              height={38}
+              width={150}
+              height={44}
               className="object-contain block"
               priority
             />
@@ -93,7 +95,7 @@ export default function Navbar() {
                 <Link
                   href={link.href}
                   className={cn(
-                    'relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-250 whitespace-nowrap',
+                    'relative px-4 py-2.5 rounded-full text-base font-medium transition-all duration-250 whitespace-nowrap',
                     pathname === link.href
                       ? 'text-[#F7F7F7]'
                       : 'text-[#8A8A8A] hover:text-[#D4D4D4]'

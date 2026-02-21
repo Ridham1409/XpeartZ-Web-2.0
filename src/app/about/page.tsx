@@ -1,12 +1,11 @@
-import type { Metadata } from 'next'
-import { CheckCircle2 } from 'lucide-react'
+"use client"
+
+import { CheckCircle2, Compass, Target, MessageSquare, RefreshCw } from 'lucide-react'
+import Image from 'next/image'
 import SectionReveal from '@/components/ui/SectionReveal'
 import Button from '@/components/ui/Button'
-
-export const metadata: Metadata = {
-  title: 'About',
-  description: 'Learn about Xpeartz — our story, values, mission, and the team behind the work.',
-}
+import SpotlightCards from '@/components/ui/SpotlightCards'
+import TiltCard from '@/components/ui/TiltCard'
 
 const values = [
   { title: 'Craft Over Speed', desc: 'We trade shortcuts for precision. Every pixel is intentional.' },
@@ -33,8 +32,7 @@ export default function AboutPage() {
           <SectionReveal>
             <span className="text-[#4A4AFF] text-sm font-medium tracking-widest uppercase">About Xpeartz</span>
             <h1 className="font-heading text-5xl lg:text-7xl font-bold text-[#F7F7F7] mt-4 mb-6 tracking-tight leading-[1.08] max-w-3xl">
-              Design with purpose,<br />
-              <span className="text-gradient-blue">built to last</span>
+              The <span className="text-gradient-blue">Best Website Maker</span> & Freelance Agency with a mission
             </h1>
             <p className="text-[#A0A0A0] text-lg leading-relaxed max-w-2xl">
               Xpeartz is a premium digital design studio working at the intersection of craft, strategy, and technology. We partner with ambitious brands to create digital experiences that are not just beautiful — but effective.
@@ -62,14 +60,54 @@ export default function AboutPage() {
               </div>
             </SectionReveal>
             <SectionReveal delay={0.2}>
-              <div className="relative rounded-3xl overflow-hidden aspect-[4/3] bg-[#1A1A1E] border border-[#2A2A2E]">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_30%,rgba(74,74,255,0.12)_0%,transparent_70%)]" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center space-y-2">
-                    <div className="font-heading text-8xl font-bold text-gradient-blue">X</div>
-                    <div className="text-[#A0A0A0] text-sm tracking-widest">XPEARTZ</div>
+              <div className="grid grid-cols-2 gap-4 h-full">
+                {/* Stat 1 */}
+                <TiltCard color="#4A4AFF" className="p-6 bg-[#1A1A1E] border-[#2A2A2E] flex flex-col justify-between">
+                  <div className="relative">
+                    <div className="font-heading text-5xl font-bold text-[#4A4AFF]">50+</div>
+                    <div className="text-[#F7F7F7] font-medium mt-1 text-sm">Projects Delivered</div>
+                    <div className="text-[#A0A0A0] text-xs mt-1 leading-relaxed">Websites, brands & digital products shipped</div>
                   </div>
-                </div>
+                  <div className="relative w-8 h-8 rounded-xl bg-[#4A4AFF]/20 flex items-center justify-center mt-4">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4A4AFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  </div>
+                </TiltCard>
+
+                {/* Stat 2 */}
+                <TiltCard color="#CC44BB" className="p-6 bg-[#1A1A1E] border-[#2A2A2E] flex flex-col justify-between">
+                  <div className="relative">
+                    <div className="font-heading text-5xl font-bold text-[#CC44BB]">100%</div>
+                    <div className="text-[#F7F7F7] font-medium mt-1 text-sm">Client Satisfaction</div>
+                    <div className="text-[#A0A0A0] text-xs mt-1 leading-relaxed">Every client leaves happy — guaranteed</div>
+                  </div>
+                  <div className="relative w-8 h-8 rounded-xl bg-[#CC44BB]/20 flex items-center justify-center mt-4">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#CC44BB" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  </div>
+                </TiltCard>
+
+                {/* Stat 3 */}
+                <TiltCard color="#EFCB68" className="p-6 bg-[#1A1A1E] border-[#2A2A2E] flex flex-col justify-between">
+                  <div className="relative">
+                    <div className="font-heading text-5xl font-bold text-[#EFCB68]">7d</div>
+                    <div className="text-[#F7F7F7] font-medium mt-1 text-sm">Fast Turnaround</div>
+                    <div className="text-[#A0A0A0] text-xs mt-1 leading-relaxed">Most websites live in under a week</div>
+                  </div>
+                  <div className="relative w-8 h-8 rounded-xl bg-[#EFCB68]/20 flex items-center justify-center mt-4">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EFCB68" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  </div>
+                </TiltCard>
+
+                {/* Stat 4 */}
+                <TiltCard color="#F7F7F7" className="p-6 bg-gradient-to-br from-[#4A4AFF]/20 to-[#CC44BB]/10 border-[#4A4AFF]/30 flex flex-col justify-between">
+                  <div className="relative">
+                    <div className="font-heading text-5xl font-bold text-[#F7F7F7]">1</div>
+                    <div className="text-[#F7F7F7] font-medium mt-1 text-sm">Expert Studio</div>
+                    <div className="text-[#A0A0A0] text-xs mt-1 leading-relaxed">Boutique quality, focused & passionate</div>
+                  </div>
+                  <div className="relative w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center mt-4 border border-white/20">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F7F7F7" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  </div>
+                </TiltCard>
               </div>
             </SectionReveal>
           </div>
@@ -85,17 +123,18 @@ export default function AboutPage() {
               Principles we work by
             </h2>
           </SectionReveal>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {values.map((v, i) => (
-              <SectionReveal key={v.title} delay={i * 0.1}>
-                <div className="p-6 rounded-2xl border border-[#2A2A2E] bg-[#1A1A1E] h-full">
-                  <CheckCircle2 size={20} className="text-[#4A4AFF] mb-4" />
-                  <h3 className="font-heading font-semibold text-[#F7F7F7] mb-2">{v.title}</h3>
-                  <p className="text-[#A0A0A0] text-sm leading-relaxed">{v.desc}</p>
-                </div>
-              </SectionReveal>
-            ))}
-          </div>
+          <SpotlightCards
+            items={values.map((v, i) => ({
+              title: v.title,
+              description: v.desc,
+              icon: i === 0 ? <Compass size={18} strokeWidth={1.9} color="#4A4AFF" /> :
+                    i === 1 ? <Target size={18} strokeWidth={1.9} color="#CC44BB" /> :
+                    i === 2 ? <MessageSquare size={18} strokeWidth={1.9} color="#EFCB68" /> :
+                    <RefreshCw size={18} strokeWidth={1.9} color="#34d399" />,
+              color: i === 0 ? "#4A4AFF" : i === 1 ? "#CC44BB" : i === 2 ? "#EFCB68" : "#34d399"
+            }))}
+            className="!px-0 !bg-transparent"
+          />
         </div>
       </section>
 
@@ -144,16 +183,16 @@ export default function AboutPage() {
           </SectionReveal>
           <div className="flex justify-center mb-14">
             <SectionReveal>
-              <div className="p-8 rounded-2xl border border-[#2A2A2E] bg-[#1A1A1E] text-center w-64">
+              <TiltCard color="#4A4AFF" className="p-8 bg-[#1A1A1E] border-[#2A2A2E] text-center w-64 mx-auto">
                 <div
                   className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 overflow-hidden"
                   style={{ background: 'linear-gradient(135deg, #4A4AFF33, #4A4AFF66)', border: '1px solid #4A4AFF40' }}
                 >
-                  <img src="/logo.png" alt="Xpeartz" className="w-14 h-14 object-contain" />
+                  <Image src="/logo.png" alt="Xpeartz" width={56} height={56} className="object-contain" />
                 </div>
                 <h3 className="font-heading font-semibold text-[#F7F7F7]">Ridham Bhavnagariya</h3>
                 <p className="text-[#A0A0A0] text-xs mt-1">Founder & Creative Director</p>
-              </div>
+              </TiltCard>
             </SectionReveal>
           </div>
           <SectionReveal>

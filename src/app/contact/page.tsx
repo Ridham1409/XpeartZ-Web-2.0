@@ -1,25 +1,47 @@
 'use client'
 
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { CheckCircle2, Mail, MapPin, Clock } from 'lucide-react'
 import SectionReveal from '@/components/ui/SectionReveal'
+import SpotlightCards from '@/components/ui/SpotlightCards'
+import { Slider } from "@/components/base/slider/slider"
+
+const countryOptions = [
+  { code: '+91', label: 'IN (+91)', placeholder: '98765 43210' },
+  { code: '+1', label: 'US/CA (+1)', placeholder: '202-555-0123' },
+  { code: '+44', label: 'UK (+44)', placeholder: '7123 456789' },
+  { code: '+61', label: 'AU (+61)', placeholder: '412 345 678' },
+  { code: '+971', label: 'UAE (+971)', placeholder: '50 123 4567' },
+  { code: '+49', label: 'DE (+49)', placeholder: '1512 3456789' },
+  { code: '+33', label: 'FR (+33)', placeholder: '6 12 34 56 78' },
+  { code: '+81', label: 'JP (+81)', placeholder: '090-1234-5678' },
+  { code: '+86', label: 'CN (+86)', placeholder: '139 1234 5678' },
+  { code: '+65', label: 'SG (+65)', placeholder: '8123 4567' },
+  { code: '+55', label: 'BR (+55)', placeholder: '11 91234-5678' },
+]
 
 const schema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Please enter a valid email'),
+  email: z.string().email('Please enter a valid email').optional().or(z.literal('')),
+  countryCode: z.string(),
+  phone: z.string().min(10, 'Please enter a valid phone number').optional().or(z.literal('')),
   company: z.string().optional(),
   projectType: z.string().min(1, 'Please select a project type'),
-  budget: z.string().min(1, 'Please select a budget range'),
+  budget: z.array(z.number()).length(2),
   message: z.string().min(20, 'Please tell us a bit more (at least 20 characters)'),
-})
+}).refine((data) => {
+  return (data.email && data.email.length > 0) || (data.phone && data.phone.length > 9);
+}, {
+  message: "Either Email or Phone is required",
+  path: ["email"], // Attach error to email field
+});
 
 type FormData = z.infer<typeof schema>
 
 const projectTypes = ['Web Design & Development', 'Brand Identity', 'Mobile UI', 'Design System', 'Other']
-const budgets = ['$1,000 – $2,500', '$2,500 – $7,500', '$7,500 – $15,000', '$15,000+', 'Let\'s discuss']
 
 const contactInfo = [
   { icon: <Mail size={18} />, label: 'Email', value: 'ridhambhavnagariya@gmail.com' },
@@ -33,16 +55,58 @@ export default function ContactPage() {
   const {
     register,
     handleSubmit,
+    control,
+    watch,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<FormData>({ resolver: zodResolver(schema) })
+  } = useForm<FormData>({ 
+    resolver: zodResolver(schema),
+    defaultValues: {
+      countryCode: '+91',
+      budget: [89, 500] // Start from user requested 89
+    }
+  })
+
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const onSubmit = async (data: FormData) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1200))
-    console.log('Form data:', data)
-    setSubmitted(true)
-    reset()
+    setSubmitError(null)
+    try {
+      // Format budget range into a readable string for the email
+      const budgetRange = `$${data.budget[0]} - ${data.budget[1] === 1000 ? '$1,000+' : `$${data.budget[1]}`}`
+      
+      const payload = {
+        access_key: "32a8b85a-6718-452b-9aa8-af7944b20bbd",
+        subject: "New Project Inquiry from Xpeartz Website",
+        name: data.name,
+        email: data.email,
+        phone: `${data.countryCode} ${data.phone}`,
+        company: data.company || "Not provided",
+        project_type: data.projectType,
+        budget: budgetRange,
+        message: data.message
+      }
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setSubmitted(true)
+        reset()
+      } else {
+        setSubmitError(result.message || "Something went wrong. Please try again.")
+      }
+    } catch (error) {
+      setSubmitError("Failed to send message. Please check your connection and try again.")
+      console.error(error)
+    }
   }
 
   return (
@@ -71,19 +135,17 @@ export default function ContactPage() {
             <div className="space-y-6">
               <SectionReveal>
                 <h2 className="font-heading text-2xl font-bold text-[#F7F7F7] mb-8">Get in Touch</h2>
-                <div className="space-y-5">
-                  {contactInfo.map(item => (
-                    <div key={item.label} className="flex items-start gap-4">
-                      <div className="w-9 h-9 rounded-lg bg-[#1A1A1E] border border-[#2A2A2E] flex items-center justify-center text-[#4A4AFF] shrink-0">
-                        {item.icon}
-                      </div>
-                      <div>
-                        <div className="text-[#A0A0A0] text-xs uppercase tracking-widest mb-1">{item.label}</div>
-                        <div className="text-[#F7F7F7] text-sm">{item.value}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <SpotlightCards
+                  items={contactInfo.map((item, i) => ({
+                    title: item.label,
+                    description: item.value,
+                    icon: i === 0 ? <Mail size={18} strokeWidth={1.9} color="#4A4AFF" /> : 
+                        i === 1 ? <MapPin size={18} strokeWidth={1.9} color="#CC44BB" /> : 
+                        <Clock size={18} strokeWidth={1.9} color="#EFCB68" />,
+                    color: i === 0 ? "#4A4AFF" : i === 1 ? "#CC44BB" : "#EFCB68"
+                  }))}
+                  className="!px-0 !py-0 !bg-transparent [&>div:last-child]:grid-cols-1 [&>div:last-child]:gap-4"
+                />
               </SectionReveal>
 
               <SectionReveal delay={0.1}>
@@ -135,7 +197,7 @@ export default function ContactPage() {
                         {errors.name && <p className="text-red-400 text-xs mt-1.5">{errors.name.message}</p>}
                       </div>
                       <div>
-                        <label className="block text-[#A0A0A0] text-xs uppercase tracking-widest mb-2">Email Address *</label>
+                        <label className="block text-[#A0A0A0] text-xs uppercase tracking-widest mb-2">Email Address <span className="text-[#A0A0A0]/50 lowercase">(Required if no phone)</span></label>
                         <input
                           {...register('email')}
                           type="email"
@@ -146,36 +208,89 @@ export default function ContactPage() {
                       </div>
                     </div>
 
-                    <div>
-                      <label className="block text-[#A0A0A0] text-xs uppercase tracking-widest mb-2">Company (Optional)</label>
-                      <input
-                        {...register('company')}
-                        className="w-full px-4 py-3 rounded-xl bg-[#1A1A1E] border border-[#2A2A2E] text-[#F7F7F7] text-sm placeholder:text-[#A0A0A0]/50 focus:outline-none focus:border-[#4A4AFF]/60 focus:bg-[#4A4AFF]/5 transition-all"
-                        placeholder="Your company name"
-                      />
+                    <div className="grid sm:grid-cols-2 gap-5">
+                      <div>
+                        <label className="block text-[#A0A0A0] text-xs uppercase tracking-widest mb-2">Phone Number <span className="text-[#A0A0A0]/50 lowercase">(Required if no email)</span></label>
+                        <div className="flex gap-2">
+                          <div className="relative w-[115px]">
+                            <select
+                              {...register('countryCode')}
+                              className="w-full h-full px-3 py-3 rounded-xl bg-[#1A1A1E] border border-[#2A2A2E] text-[#F7F7F7] text-sm focus:outline-none focus:border-[#4A4AFF]/60 focus:bg-[#4A4AFF]/5 transition-all appearance-none cursor-pointer"
+                            >
+                              {countryOptions.map(opt => (
+                                <option key={opt.code} value={opt.code} className="bg-[#1A1A1E] text-[#F7F7F7] py-2">
+                                  {opt.label}
+                                </option>
+                              ))}
+                            </select>
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#A0A0A0]">
+                              <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <input
+                              {...register('phone')}
+                              type="tel"
+                              className="w-full px-4 py-3 rounded-xl bg-[#1A1A1E] border border-[#2A2A2E] text-[#F7F7F7] text-sm placeholder:text-[#A0A0A0]/50 focus:outline-none focus:border-[#4A4AFF]/60 focus:bg-[#4A4AFF]/5 transition-all"
+                              placeholder={countryOptions.find(opt => opt.code === watch('countryCode'))?.placeholder || "98765 43210"}
+                            />
+                            {errors.phone && <p className="text-red-400 text-xs mt-1.5">{errors.phone.message}</p>}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[#A0A0A0] text-xs uppercase tracking-widest mb-2">Company (Optional)</label>
+                        <input
+                          {...register('company')}
+                          className="w-full px-4 py-3 rounded-xl bg-[#1A1A1E] border border-[#2A2A2E] text-[#F7F7F7] text-sm placeholder:text-[#A0A0A0]/50 focus:outline-none focus:border-[#4A4AFF]/60 focus:bg-[#4A4AFF]/5 transition-all"
+                          placeholder="Your company name"
+                        />
+                      </div>
                     </div>
 
                     <div className="grid sm:grid-cols-2 gap-5">
                       <div>
                         <label className="block text-[#A0A0A0] text-xs uppercase tracking-widest mb-2">Project Type *</label>
-                        <select
-                          {...register('projectType')}
-                          className="w-full px-4 py-3 rounded-xl bg-[#1A1A1E] border border-[#2A2A2E] text-[#F7F7F7] text-sm focus:outline-none focus:border-[#4A4AFF]/60 transition-all appearance-none"
-                        >
-                          <option value="">Select type</option>
-                          {projectTypes.map(t => <option key={t} value={t}>{t}</option>)}
-                        </select>
+                        <div className="relative">
+                          <select
+                            {...register('projectType')}
+                            className="w-full px-4 py-3 rounded-xl bg-[#1A1A1E] border border-[#2A2A2E] text-[#F7F7F7] text-sm focus:outline-none focus:border-[#4A4AFF]/60 focus:bg-[#4A4AFF]/5 transition-all appearance-none cursor-pointer"
+                          >
+                            <option value="" className="bg-[#1A1A1E] text-[#A0A0A0]">Select type</option>
+                            {projectTypes.map(t => <option key={t} value={t} className="bg-[#1A1A1E] text-[#F7F7F7]">{t}</option>)}
+                          </select>
+                          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#A0A0A0]">
+                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </div>
+                        </div>
                         {errors.projectType && <p className="text-red-400 text-xs mt-1.5">{errors.projectType.message}</p>}
                       </div>
                       <div>
-                        <label className="block text-[#A0A0A0] text-xs uppercase tracking-widest mb-2">Budget Range *</label>
-                        <select
-                          {...register('budget')}
-                          className="w-full px-4 py-3 rounded-xl bg-[#1A1A1E] border border-[#2A2A2E] text-[#F7F7F7] text-sm focus:outline-none focus:border-[#4A4AFF]/60 transition-all appearance-none"
-                        >
-                          <option value="">Select budget</option>
-                          {budgets.map(b => <option key={b} value={b}>{b}</option>)}
-                        </select>
+                        <label className="block text-[#A0A0A0] text-xs uppercase tracking-widest mb-5">Budget Range ($) *</label>
+                        <Controller
+                          control={control}
+                          name="budget"
+                          render={({ field }) => (
+                            <div className="pt-2 px-2">
+                              <Slider
+                                min={89}
+                                max={1000}
+                                step={10}
+                                value={field.value}
+                                onValueChange={field.onChange}
+                              />
+                              <div className="flex justify-between mt-5 text-[#F7F7F7] font-medium text-sm">
+                                <span>${field.value?.[0]}</span>
+                                <span>{field.value?.[1] === 1000 ? '$1,000+' : `$${field.value?.[1]}`}</span>
+                              </div>
+                            </div>
+                          )}
+                        />
                         {errors.budget && <p className="text-red-400 text-xs mt-1.5">{errors.budget.message}</p>}
                       </div>
                     </div>
@@ -191,12 +306,24 @@ export default function ContactPage() {
                       {errors.message && <p className="text-red-400 text-xs mt-1.5">{errors.message.message}</p>}
                     </div>
 
+                    {submitError && (
+                      <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+                        {submitError}
+                      </div>
+                    )}
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-4 bg-[#4A4AFF] text-white font-medium rounded-xl hover:bg-[#3B3BDD] hover:shadow-[0_0_30px_rgba(74,74,255,0.4)] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed text-sm"
+                      className="w-full mt-4 py-4 bg-[#4A4AFF] text-white font-medium rounded-xl hover:bg-[#3B3BDD] hover:shadow-[0_0_30px_rgba(74,74,255,0.4)] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed text-sm flex items-center justify-center gap-2"
                     >
-                      {isSubmitting ? 'Sending...' : 'Send Message'}
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        'Send Message'
+                      )}
                     </button>
                     <p className="text-[#A0A0A0] text-xs text-center">
                       We reply to every message. No spam, ever.
