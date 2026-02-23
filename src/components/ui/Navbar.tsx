@@ -72,7 +72,7 @@ export default function Navbar() {
           />
 
           {/* Logo — CSS filter removes white bg, preserves gradient */}
-          <Link href="/" className="flex items-center shrink-0 relative z-10">
+          <Link href="/" className="flex items-center shrink-0 relative z-10" data-no-cursor="true">
             <Image
               src="/logo.png"
               alt="Xpeartz"
