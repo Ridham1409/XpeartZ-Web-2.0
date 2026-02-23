@@ -256,7 +256,7 @@ export default function HomePage() {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
-                <Link 
+                <a 
                   href={`/designs/${project.slug}.html`} 
                   target="_blank" 
                   rel="noopener noreferrer"
@@ -271,7 +271,7 @@ export default function HomePage() {
                   <div className="flex items-center">
                     <span className="text-[#A0A0A0] text-sm group-hover:text-[#F7F7F7] transition-colors">{project.category}</span>
                   </div>
-                </Link>
+                </a>
               </motion.li>
             ))}
           </ul>

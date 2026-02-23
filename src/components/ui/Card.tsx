@@ -20,7 +20,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
       viewport={{ once: true, margin: '0px 0px -50px 0px' }}
       transition={{ duration: 0.4, delay: Math.min(index * 0.04, 0.25) }}
     >
-      <Link href={`/designs/${project.slug}.html`} target="_blank" rel="noopener noreferrer" className="group block">
+      <a href={`/designs/${project.slug}.html`} target="_blank" rel="noopener noreferrer" className="group block">
         <div className="relative overflow-hidden rounded-2xl bg-[#1A1A1E] border border-[#2A2A2E] hover:border-[#4A4AFF]/40 transition-all duration-500 shadow-[0_4px_24px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
           {/* Thumbnail */}
           <div className="relative overflow-hidden bg-[#0F0F11]">
@@ -63,7 +63,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             </div>
           </div>
         </div>
-      </Link>
+      </a>
     </motion.div>
   )
 }
