@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { Space_Grotesk, Inter } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/ui/Navbar'
@@ -91,6 +92,25 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`}>
+      <head>
+        {/* Google tag (gtag.js) */}
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=G-7L6KGX4BFR`}
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-7L6KGX4BFR');
+            `,
+          }}
+        />
+      </head>
       <body className="bg-[#0F0F11] text-[#F7F7F7] font-body antialiased">
         <JsonLd />
         <CustomCursor />
