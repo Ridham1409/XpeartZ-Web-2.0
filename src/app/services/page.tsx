@@ -9,7 +9,7 @@ import TiltCard from '@/components/ui/TiltCard'
 const tiers = [
   {
     name: 'Starter',
-    price: '$89',
+    price: '$199',
     desc: 'Perfect for early-stage startups and solo founders validating an idea.',
     icon: <Box size={20} className="text-[#4A4AFF]" />,
     features: [
@@ -24,7 +24,7 @@ const tiers = [
   },
   {
     name: 'Studio',
-    price: '$175',
+    price: '$359',
     desc: 'Our most popular package — ideal for growing businesses ready to scale.',
     icon: <Blocks size={20} className="text-[#CC44BB]" />,
     features: [
