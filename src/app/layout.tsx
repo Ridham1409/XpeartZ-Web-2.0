@@ -23,19 +23,20 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Xpeartz — Best Freelance Agency & Premium Website Maker',
-    template: '%s | Xpeartz — World-Class Digital Agency',
+    default: 'Best Agency for Website Development and Design | Xpeartz',
+    template: '%s | Xpeartz — Best Agency for Website Development',
   },
-  description: 'Xpeartz is the best freelance agency and premium website maker crafting high-end digital experiences, world-class brand identities, and lead-generating websites for businesses globally.',
+  description: 'Looking for the best agency for website development and design? Xpeartz crafts world-class, premium, and lead-generating websites for start-ups and enterprises globally.',
   keywords: [
+    'best agency for website development and design',
+    'best web development agency',
+    'top website design company',
     'best freelance agency', 
     'best website maker', 
-    'best website maker for freelancers', 
-    'world-class digital agency', 
     'premium ui ux designer', 
     'top rated web design agency',
     'affordable custom website design',
-    'lead generating websites',
+    'ecommerce website development agency',
     'Xpeartz agency',
     'modern web development'
   ],
@@ -50,21 +51,21 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://xpeartz.com',
     siteName: 'Xpeartz',
-    title: 'Xpeartz — Best Freelance Agency & Premium Website Maker',
-    description: 'Elevate your brand with world-class digital experiences and lead-generating websites.',
+    title: 'Best Agency for Website Development and Design | Xpeartz',
+    description: 'Looking for the best agency for website development and design? Elevate your brand with world-class digital experiences and lead-generating websites.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Xpeartz — World-Class Digital Agency',
+        alt: 'Xpeartz — Best Agency for Website Development',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Xpeartz — Best Freelance Agency & Premium Website Maker',
-    description: 'Crafting exceptional digital experiences and world-class brand identities.',
+    title: 'Best Agency for Website Development and Design | Xpeartz',
+    description: 'Looking for the best agency for website development and design? Crafting exceptional digital experiences.',
     images: ['/og-image.png'],
   },
   robots: {

@@ -74,7 +74,7 @@ export default function BlogIndexPage() {
         </div>
       </section>
 
-      <section className="section-padding pt-0 min-h-[50vh]">
+      <section className="pb-12 min-h-[50vh]">
         <div className="container-wide">
           {filteredPosts.length === 0 ? (
             <div className="text-center py-20 bg-[#0C0C0E] rounded-3xl border border-[#2A2A2E]">
@@ -92,6 +92,7 @@ export default function BlogIndexPage() {
                 <SectionReveal key={post.id} delay={(i % 10) * 0.05}>
                   <Link 
                     href={`/blog/${post.slug}`}
+                    data-no-cursor="true"
                     className="group flex flex-col justify-between h-full p-8 bg-[#0C0C0E] border border-[#232326] rounded-[24px] hover:border-[#4A4AFF]/40 hover:bg-[#121215] transition-all duration-300 relative overflow-hidden"
                   >
                     {/* Hover Glow */}
