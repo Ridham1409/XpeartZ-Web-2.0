@@ -14,7 +14,7 @@ export default function CustomCursor() {
   const mouseX = useMotionValue(-100)
   const mouseY = useMotionValue(-100)
   
-  // Use a very fast spring for a "native" feel
+  // Use a very fast spring for the label to stay close to the native cursor
   const cursorX = useSpring(mouseX, { stiffness: 2000, damping: 100, mass: 0.01 })
   const cursorY = useSpring(mouseY, { stiffness: 2000, damping: 100, mass: 0.01 })
 
@@ -49,40 +49,27 @@ export default function CustomCursor() {
   if (isMobile) return null;
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 pointer-events-none z-[9999] flex items-center justify-center mix-blend-difference overflow-hidden"
-      style={{
-        x: cursorX,
-        y: cursorY,
-        translateX: '-50%',
-        translateY: '-50%',
-      }}
-      animate={{
-        width: showText ? 110 : 8,
-        height: showText ? 36 : 8,
-        borderRadius: showText ? '12px' : '9999px',
-        backgroundColor: 'rgba(255, 255, 255, 1)',
-      }}
-      transition={{
-        type: 'spring',
-        stiffness: 1000,
-        damping: 50,
-        mass: 0.05
-      }}
-    >
+    <div className="fixed inset-0 pointer-events-none z-[9999]">
       <AnimatePresence>
         {showText && (
-          <motion.span 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="text-black text-[10px] font-bold tracking-widest uppercase text-center leading-tight whitespace-nowrap"
-            style={{ mixBlendMode: 'normal' }}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            className="fixed top-0 left-0 bg-white px-4 py-2 rounded-xl flex items-center justify-center shadow-xl"
+            style={{
+              x: cursorX,
+              y: cursorY,
+              translateX: '20px', // Offset from native cursor
+              translateY: '20px',
+            }}
           >
-            Press & Hold
-          </motion.span>
+            <span className="text-black text-[10px] font-bold tracking-widest uppercase text-center leading-tight whitespace-nowrap">
+              Press & Hold
+            </span>
+          </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   )
 }
