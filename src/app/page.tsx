@@ -4,12 +4,13 @@ import { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from 'framer-motion'
 import { ArrowRight, ArrowUpRight, Zap, Palette, Code2, Star } from 'lucide-react'
 import SectionReveal from '@/components/ui/SectionReveal'
 import { ProjectCard } from '@/components/ui/Card'
 import { projects } from '@/lib/projects'
 import SpotlightCards from '@/components/ui/SpotlightCards'
+import LeadGenModal from '@/components/ui/LeadGenModal'
 
 const benefits = [
   'Professional Digital Solutions Built for Growth',
@@ -91,13 +92,78 @@ export default function HomePage() {
     setFeaturedProjects(shuffled.slice(0, 5));
   }, []);
 
+  // Press & Hold Lead Gen Logic
+  const [holdProgress, setHoldProgress] = useState(0)
+  const [isHolding, setIsHolding] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const holdTimerRef = useRef<NodeJS.Timeout | null>(null)
+
+  const startHold = () => {
+    setIsHolding(true)
+    setHoldProgress(0)
+    
+    const startTime = Date.now()
+    const duration = 1500 // 1.5 seconds
+
+    holdTimerRef.current = setInterval(() => {
+      const elapsed = Date.now() - startTime
+      const progress = Math.min((elapsed / duration) * 100, 100)
+      setHoldProgress(progress)
+
+      if (progress >= 100) {
+        if (holdTimerRef.current) clearInterval(holdTimerRef.current)
+        setIsHolding(false)
+        setHoldProgress(0)
+        setIsModalOpen(true)
+      }
+    }, 16)
+  }
+
+  const stopHold = () => {
+    if (holdTimerRef.current) clearInterval(holdTimerRef.current)
+    setIsHolding(false)
+    setHoldProgress(0)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (holdTimerRef.current) clearInterval(holdTimerRef.current)
+    }
+  }, [])
+
   return (
     <>
       {/* ═══════════ HERO ═══════════ */}
-      <section id="hero-section" ref={heroRef} className="relative min-h-[90vh] sm:min-h-screen flex items-center overflow-hidden">
+      <section 
+        id="hero-section" 
+        ref={heroRef} 
+        onMouseDown={startHold}
+        onMouseUp={stopHold}
+        onMouseLeave={stopHold}
+        onTouchStart={startHold}
+        onTouchEnd={stopHold}
+        className="relative min-h-[90vh] sm:min-h-screen flex items-center overflow-hidden cursor-none select-none"
+      >
         
         {/* Background glow */}
         <div className="absolute inset-0 bg-hero-glow pointer-events-none" />
+
+        {/* Hold Progress Bar */}
+        <AnimatePresence>
+          {isHolding && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-x-0 top-0 h-1 bg-[#4A4AFF]/20 z-50 pointer-events-none"
+            >
+              <motion.div 
+                className="h-full bg-gradient-to-r from-[#4A4AFF] to-[#CC44BB]"
+                style={{ width: `${holdProgress}%` }}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="container-wide relative z-10 w-full mt-24 sm:mt-32">
           <motion.div style={{ opacity: heroOpacity, y: heroY }} className="flex flex-col items-center text-center max-w-4xl mx-auto w-full">
@@ -368,6 +434,11 @@ export default function HomePage() {
           </SectionReveal>
         </div>
       </section>
+
+      <LeadGenModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </>
   )
 }
