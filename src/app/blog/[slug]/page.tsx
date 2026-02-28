@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { blogPosts } from '@/lib/blog-data'
 import SectionReveal from '@/components/ui/SectionReveal'
 import { ArrowLeft, ArrowRight, Tag, Calendar, User, Clock } from 'lucide-react'
+import { blogContent } from '@/lib/blog-content'
 
 // Generate static routes for all 50 blog posts at build time
 export function generateStaticParams() {
@@ -91,36 +92,40 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
           </header>
 
           <div className="prose prose-invert prose-lg max-w-none prose-headings:font-heading prose-headings:font-bold prose-a:text-[#4A4AFF] prose-p:text-[#A0A0A0] prose-p:leading-relaxed prose-li:text-[#A0A0A0]">
-            {/* Placeholder Content for the SEO Page */}
-            <h2>Understanding the Strategy</h2>
-            <p>
-              Growing your online business requires a deliberate strategy. In this article, we cover everything you need to know about <strong>{post.keyword}</strong>.
-              Whether you are an established brand or a growing startup, mastering these concepts will separate you from the competition.
-            </p>
-            
-            <h3>Core Principles</h3>
-            <ul>
-              <li>Identify your most profitable customer segments.</li>
-              <li>Eliminate friction in your sales and conversion processes.</li>
-              <li>Consistently optimize your digital presence for search engines and user experience.</li>
-              <li>Leverage automated systems to scale without exponentially increasing headcount.</li>
-            </ul>
+            {blogContent[post.slug] || (
+              <>
+                {/* Fallback Placeholder Content for the SEO Page */}
+                <h2>Understanding the Strategy</h2>
+                <p>
+                  Growing your online business requires a deliberate strategy. In this article, we cover everything you need to know about <strong>{post.keyword}</strong>.
+                  Whether you are an established brand or a growing startup, mastering these concepts will separate you from the competition.
+                </p>
+                
+                <h3>Core Principles</h3>
+                <ul>
+                  <li>Identify your most profitable customer segments.</li>
+                  <li>Eliminate friction in your sales and conversion processes.</li>
+                  <li>Consistently optimize your digital presence for search engines and user experience.</li>
+                  <li>Leverage automated systems to scale without exponentially increasing headcount.</li>
+                </ul>
 
-            <div className="p-8 my-10 bg-[#1A1A1E] border-l-4 border-[#4A4AFF] rounded-r-2xl">
-              <h4 className="text-[#F7F7F7] font-semibold text-xl mb-3 mt-0">Need Expert Implementation?</h4>
-              <p className="text-[#A0A0A0] mb-5 text-base">
-                Reading about strategy is one thing. Executing it perfectly is another. Let Xpeartz handle the heavy lifting for your brand.
-              </p>
-              <Link href="/contact" className="inline-flex items-center gap-2 px-6 py-3 bg-[#4A4AFF] text-white text-sm font-medium rounded-xl hover:bg-[#3B3BDD] transition-colors">
-                Schedule a Strategy Call <ArrowRight size={14} />
-              </Link>
-            </div>
+                <div className="p-8 my-10 bg-[#1A1A1E] border-l-4 border-[#4A4AFF] rounded-r-2xl">
+                  <h4 className="text-[#F7F7F7] font-semibold text-xl mb-3 mt-0">Need Expert Implementation?</h4>
+                  <p className="text-[#A0A0A0] mb-5 text-base">
+                    Reading about strategy is one thing. Executing it perfectly is another. Let Xpeartz handle the heavy lifting for your brand.
+                  </p>
+                  <Link href="/contact" className="inline-flex items-center gap-2 px-6 py-3 bg-[#4A4AFF] text-white text-sm font-medium rounded-xl hover:bg-[#3B3BDD] transition-colors">
+                    Schedule a Strategy Call <ArrowRight size={14} />
+                  </Link>
+                </div>
 
-            <h3>Next Steps</h3>
-            <p>
-              Start implementing these changes today. Monitor your analytics closely to see how modifications impact your bottom line. If you need help with the technical execution 
-              or strategic planning side of <strong>{post.keyword}</strong>, reach out to our team at Xpeartz.
-            </p>
+                <h3>Next Steps</h3>
+                <p>
+                  Start implementing these changes today. Monitor your analytics closely to see how modifications impact your bottom line. If you need help with the technical execution 
+                  or strategic planning side of <strong>{post.keyword}</strong>, reach out to our team at Xpeartz.
+                </p>
+              </>
+            )}
           </div>
         </SectionReveal>
       </div>
