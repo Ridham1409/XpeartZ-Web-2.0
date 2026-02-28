@@ -16,13 +16,13 @@ export default function CustomCursor() {
   const mouseX = useMotionValue(-100)
   const mouseY = useMotionValue(-100)
   
-  // Center Dot: Very fast, precise
-  const dotX = useSpring(mouseX, { stiffness: 1000, damping: 50, mass: 0.05 })
-  const dotY = useSpring(mouseY, { stiffness: 1000, damping: 50, mass: 0.05 })
+  // Center Dot: Extremely fast, near 1:1 with native cursor
+  const dotX = useSpring(mouseX, { stiffness: 2000, damping: 90, mass: 0.01 })
+  const dotY = useSpring(mouseY, { stiffness: 2000, damping: 90, mass: 0.01 })
 
-  // Outer Ring: Slower, trailing physics
-  const ringX = useSpring(mouseX, { stiffness: 350, damping: 35, mass: 0.15 })
-  const ringY = useSpring(mouseY, { stiffness: 350, damping: 35, mass: 0.15 })
+  // Outer Ring: Tightened trailing physics
+  const ringX = useSpring(mouseX, { stiffness: 800, damping: 60, mass: 0.1 })
+  const ringY = useSpring(mouseY, { stiffness: 800, damping: 60, mass: 0.1 })
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
