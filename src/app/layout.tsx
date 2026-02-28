@@ -8,6 +8,7 @@ import SmoothScroll from '@/components/ui/SmoothScroll'
 import CustomCursor from '@/components/ui/CustomCursor'
 import GlobalBackground from '@/components/ui/GlobalBackground'
 import JsonLd from '@/components/seo/JsonLd'
+import WhatsAppButton from '@/components/ui/WhatsAppButton'
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -125,6 +126,7 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
+            <WhatsAppButton />
           </div>
         </SmoothScroll>
       </body>
