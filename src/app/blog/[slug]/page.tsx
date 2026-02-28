@@ -23,6 +23,8 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
     }
   }
 
+  const hasContent = !!blogContent[post.slug];
+
   return {
     title: post.title,
     description: post.excerpt,
@@ -35,6 +37,10 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
     },
     alternates: {
       canonical: `https://xpeartz.com/blog/${post.slug}`,
+    },
+    robots: {
+      index: hasContent,
+      follow: true,
     }
   }
 }
@@ -46,8 +52,37 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
     notFound()
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.excerpt,
+    author: {
+      '@type': 'Organization',
+      name: 'Xpeartz',
+      url: 'https://xpeartz.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Xpeartz',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://xpeartz.com/logo.png',
+      },
+    },
+    datePublished: new Date().toISOString(), // In a real app, use the actual publish date from CMS
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://xpeartz.com/blog/${post.slug}`,
+    },
+  };
+
   return (
     <article className="min-h-screen pt-32 pb-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="container-max-w-3xl mx-auto px-6 md:px-12">
         <SectionReveal>
           <Link 

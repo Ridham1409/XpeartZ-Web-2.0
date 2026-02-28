@@ -1,24 +1,33 @@
 import { MetadataRoute } from 'next'
-import { projects } from '@/lib/projects'
+import { blogPosts } from '@/lib/blog-data'
+import { blogContent } from '@/lib/blog-content'
+
+const SITE_URL = 'https://xpeartz.com'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://xpeartz.com'
-
-  // Main pages
-  const routes = ['', '/work', '/services', '/about', '/contact'].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date().toISOString().split('T')[0],
+  // Base routes
+  const routes = [
+    '',
+    '/services',
+    '/work',
+    '/contact',
+    '/blog',
+  ].map((route) => ({
+    url: `${SITE_URL}${route}`,
+    lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: route === '' ? 1 : 0.8,
   }))
 
-  // Project pages
-  const projectRoutes = projects.map((project) => ({
-    url: `${baseUrl}/work/${project.slug}`,
-    lastModified: new Date().toISOString().split('T')[0],
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  }))
+  // Only include published blog posts in the sitemap
+  const publishedPosts = blogPosts
+    .filter((post) => !!blogContent[post.slug])
+    .map((post) => ({
+      url: `${SITE_URL}/blog/${post.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    }))
 
-  return [...routes, ...projectRoutes]
+  return [...routes, ...publishedPosts]
 }
