@@ -126,7 +126,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${inter.variable} font-sans antialiased text-[#F7F7F7] custom-scrollbar overflow-x-hidden pt-20 flex flex-col min-h-screen bg-[#0F0F11]`}>
+      <body className={`${inter.variable} font-sans antialiased text-[#F7F7F7] custom-scrollbar overflow-x-hidden flex flex-col min-h-screen bg-[#0F0F11]`}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe 
