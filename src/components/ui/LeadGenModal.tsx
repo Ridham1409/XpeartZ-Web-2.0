@@ -79,7 +79,6 @@ export default function LeadGenModal({ isOpen, onClose }: LeadGenModalProps) {
 
   const onSubmit = async (data: FormData) => {
     setSubmitError(null)
-    setIsSubmitting(true)
     try {
       const budgetRange = `$${data.budget[0]} - ${data.budget[1] === 1000 ? '$1,000+' : `$${data.budget[1]}`}`
       
@@ -108,8 +107,6 @@ export default function LeadGenModal({ isOpen, onClose }: LeadGenModalProps) {
     } catch (error) {
       setSubmitError("Failed to submit request. Please try again.")
       console.error(error)
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
