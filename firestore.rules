@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /leads/{leadId} {
+      // Allow anyone to submit a new lead
+      allow create: if true;
+      // Block anyone from reading, updating, or deleting existing leads
+      allow read, update, delete: if false;
+    }
+  }
+}
