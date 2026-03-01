@@ -183,7 +183,7 @@ export default function HomePage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-x-0 top-0 h-1 bg-[#4A4AFF]/20 z-50 pointer-events-none"
+              className="absolute inset-x-0 top-[100px] h-1 bg-[#4A4AFF]/20 z-50 pointer-events-none max-w-5xl mx-auto rounded-full overflow-hidden"
             >
               <motion.div 
                 className="h-full bg-gradient-to-r from-[#4A4AFF] to-[#CC44BB]"
@@ -252,34 +252,15 @@ export default function HomePage() {
               transition={{ duration: 0.7, delay: 0.3 }}
               className="flex flex-col sm:flex-row items-center gap-4 mb-16"
             >
-              <motion.div
-                className="relative cursor-none touch-none"
-                whileTap={{ scale: 0.95 }}
-                onPointerDown={(e) => {
-                  e.preventDefault()
-                  startHold()
-                }}
-                onPointerUp={stopHold}
-                onPointerLeave={stopHold}
+              <button
+                onClick={() => setIsModalOpen(true)}
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
+                className="group inline-flex items-center gap-2 px-7 py-3.5 bg-[#4A4AFF] text-white font-medium rounded-xl hover:bg-[#3B3BDD] hover:shadow-[0_0_30px_rgba(74,74,255,0.4)] transition-all duration-300 relative z-50"
               >
-                <div className="relative inline-flex items-center gap-2 px-7 py-3.5 bg-[#4A4AFF] text-white font-medium rounded-xl hover:bg-[#3B3BDD] hover:shadow-[0_0_30px_rgba(74,74,255,0.4)] transition-all duration-300 pointer-events-none">
-                  <span className="relative">
-                    {isHolding ? "Keep holding..." : (
-                      <>Get a <span className="text-[#EFCB68]">Free</span> Strategy Call</>
-                    )}
-                    {isHolding && (
-                      <motion.span 
-                        className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-[#A0A0A0] whitespace-nowrap"
-                        initial={{ opacity: 0, y: -5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                      >
-                        Hold for 1.5s
-                      </motion.span>
-                    )}
-                  </span>
-                  <ArrowRight size={16} />
-                </div>
-              </motion.div>
+                Get a <span className="text-[#EFCB68]">Free</span> Strategy Call
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </button>
               <Link
                 href="/work"
                 className="group relative inline-flex items-center gap-2 px-7 py-3.5 border border-[#4A4AFF]/50 bg-[#4A4AFF]/10 text-[#F7F7F7] font-medium rounded-xl hover:bg-[#4A4AFF]/20 transition-all duration-300 overflow-hidden"
