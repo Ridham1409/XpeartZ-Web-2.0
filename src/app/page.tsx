@@ -183,7 +183,7 @@ export default function HomePage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-x-0 top-[100px] h-1 bg-[#4A4AFF]/20 z-50 pointer-events-none max-w-5xl mx-auto rounded-full overflow-hidden"
+              className="fixed inset-x-0 top-0 h-1.5 bg-[#4A4AFF]/20 z-[100] pointer-events-none"
             >
               <motion.div 
                 className="h-full bg-gradient-to-r from-[#4A4AFF] to-[#CC44BB]"
