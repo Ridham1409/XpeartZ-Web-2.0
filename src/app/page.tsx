@@ -120,7 +120,45 @@ export default function HomePage() {
     setFeaturedProjects(shuffled.slice(0, 5));
   }, []);
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Press & Hold Lead Gen Logic
+  const [holdProgress, setHoldProgress] = useState(0)
+  const [isHolding, setIsHolding] = useState(false)
+  const holdTimerRef = useRef<NodeJS.Timeout | null>(null)
+
+  const startHold = () => {
+    setIsHolding(true)
+    setHoldProgress(0)
+    
+    const startTime = Date.now()
+    const duration = 1500 // 1.5 seconds
+
+    holdTimerRef.current = setInterval(() => {
+      const elapsed = Date.now() - startTime
+      const progress = Math.min((elapsed / duration) * 100, 100)
+      setHoldProgress(progress)
+
+      if (progress >= 100) {
+        if (holdTimerRef.current) clearInterval(holdTimerRef.current)
+        setIsHolding(false)
+        setHoldProgress(0)
+        setIsModalOpen(true)
+      }
+    }, 16)
+  }
+
+  const stopHold = () => {
+    if (holdTimerRef.current) clearInterval(holdTimerRef.current)
+    setIsHolding(false)
+    setHoldProgress(0)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (holdTimerRef.current) clearInterval(holdTimerRef.current)
+    }
+  }, [])
 
   return (
     <>
@@ -128,11 +166,32 @@ export default function HomePage() {
       <section
         id="hero-section"
         ref={heroRef}
+        onMouseDown={startHold}
+        onMouseUp={stopHold}
+        onMouseLeave={stopHold}
+        onTouchStart={startHold}
+        onTouchEnd={stopHold}
         className="relative min-h-[90vh] sm:min-h-screen flex items-center overflow-hidden cursor-none select-none"
       >
         {/* Background glow */}
         <div className="absolute inset-0 bg-hero-glow pointer-events-none" />
 
+        {/* Hold Progress Bar */}
+        <AnimatePresence>
+          {isHolding && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-x-0 top-0 h-1 bg-[#4A4AFF]/20 z-50 pointer-events-none"
+            >
+              <motion.div 
+                className="h-full bg-gradient-to-r from-[#4A4AFF] to-[#CC44BB]"
+                style={{ width: `${holdProgress}%` }}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="container-wide relative z-10 w-full mt-24 sm:mt-32">
           <motion.div
@@ -193,13 +252,34 @@ export default function HomePage() {
               transition={{ duration: 0.7, delay: 0.3 }}
               className="flex flex-col sm:flex-row items-center gap-4 mb-16"
             >
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="group inline-flex items-center gap-2 px-7 py-3.5 bg-[#4A4AFF] text-white font-medium rounded-xl hover:bg-[#3B3BDD] hover:shadow-[0_0_30px_rgba(74,74,255,0.4)] transition-all duration-300"
+              <motion.div
+                className="relative cursor-none touch-none"
+                whileTap={{ scale: 0.95 }}
+                onPointerDown={(e) => {
+                  e.preventDefault()
+                  startHold()
+                }}
+                onPointerUp={stopHold}
+                onPointerLeave={stopHold}
               >
-                Get a <span className="text-[#EFCB68]">Free</span> Strategy Call
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </button>
+                <div className="relative inline-flex items-center gap-2 px-7 py-3.5 bg-[#4A4AFF] text-white font-medium rounded-xl hover:bg-[#3B3BDD] hover:shadow-[0_0_30px_rgba(74,74,255,0.4)] transition-all duration-300 pointer-events-none">
+                  <span className="relative">
+                    {isHolding ? "Keep holding..." : (
+                      <>Get a <span className="text-[#EFCB68]">Free</span> Strategy Call</>
+                    )}
+                    {isHolding && (
+                      <motion.span 
+                        className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-[#A0A0A0] whitespace-nowrap"
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                      >
+                        Hold for 1.5s
+                      </motion.span>
+                    )}
+                  </span>
+                  <ArrowRight size={16} />
+                </div>
+              </motion.div>
               <Link
                 href="/work"
                 className="group relative inline-flex items-center gap-2 px-7 py-3.5 border border-[#4A4AFF]/50 bg-[#4A4AFF]/10 text-[#F7F7F7] font-medium rounded-xl hover:bg-[#4A4AFF]/20 transition-all duration-300 overflow-hidden"
