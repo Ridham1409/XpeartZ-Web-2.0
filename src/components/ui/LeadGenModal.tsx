@@ -99,11 +99,38 @@ export default function LeadGenModal({ isOpen, onClose }: LeadGenModalProps) {
         source: 'modal_strategy_call'
       }
 
-      // 1. Save to Firestore (Cloud Functions will handle Email and Sheets integration)
+      // 1. Save to Firestore (Database Backup)
       await addDoc(collection(db, 'leads'), formData)
 
-      setSubmitted(true)
-      reset()
+      // 2. Send Email via Web3Forms
+      const payload = {
+        access_key: "32a8b85a-6718-452b-9aa8-af7944b20bbd",
+        subject: "New MODAL Project Inquiry from Xpeartz Website",
+        name: data.name,
+        email: data.email,
+        phone: `${data.countryCode} ${data.phone}`,
+        company: data.company || "Not provided",
+        project_type: data.projectType,
+        budget: budgetRange,
+        message: data.message
+      }
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setSubmitted(true)
+        reset()
+      } else {
+        setSubmitError(result.message || "Something went wrong. Please try again.")
+      }
     } catch (error) {
       setSubmitError("Failed to submit request. Please try again.")
       console.error(error)
