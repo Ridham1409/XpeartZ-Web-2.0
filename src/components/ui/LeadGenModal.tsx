@@ -79,6 +79,7 @@ export default function LeadGenModal({ isOpen, onClose }: LeadGenModalProps) {
 
   const onSubmit = async (data: FormData) => {
     setSubmitError(null)
+    setIsSubmitting(true)
     try {
       const budgetRange = `$${data.budget[0]} - ${data.budget[1] === 1000 ? '$1,000+' : `$${data.budget[1]}`}`
       
@@ -91,49 +92,24 @@ export default function LeadGenModal({ isOpen, onClose }: LeadGenModalProps) {
         budget: {
           min: data.budget[0],
           max: data.budget[1] === 1000 ? 1000 : data.budget[1],
-          isMaximum: data.budget[1] === 1000
+          isMaximum: data.budget[1] === 1000,
+          rangeLabel: budgetRange
         },
         message: data.message,
         createdAt: serverTimestamp(),
         source: 'modal_strategy_call'
       }
 
-      // 1. Save to Firestore
+      // 1. Save to Firestore (Cloud Functions will handle Email and Sheets integration)
       await addDoc(collection(db, 'leads'), formData)
 
-      // 2. Send Email via Web3Forms (Backup/Notification)
-      
-      const payload = {
-        access_key: "32a8b85a-6718-452b-9aa8-af7944b20bbd",
-        subject: "New MODAL Project Inquiry from Xpeartz Website",
-        name: data.name,
-        email: data.email,
-        phone: `${data.countryCode} ${data.phone}`,
-        company: data.company || "Not provided",
-        project_type: data.projectType,
-        budget: budgetRange,
-        message: data.message
-      }
-
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        setSubmitted(true)
-        reset()
-      } else {
-        setSubmitError(result.message || "Something went wrong. Please try again.")
-      }
+      setSubmitted(true)
+      reset()
     } catch (error) {
-      setSubmitError("Failed to send message. Please check your connection and try again.")
+      setSubmitError("Failed to submit request. Please try again.")
       console.error(error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
