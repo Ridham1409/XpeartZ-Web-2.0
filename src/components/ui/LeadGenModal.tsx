@@ -103,17 +103,19 @@ export default function LeadGenModal({ isOpen, onClose }: LeadGenModalProps) {
       await addDoc(collection(db, 'leads'), formData)
 
       // 2. Send Email via Web3Forms
-      const payload = {
+      const payload: any = {
         access_key: "32a8b85a-6718-452b-9aa8-af7944b20bbd",
-        subject: "New MODAL Project Inquiry from Xpeartz Website",
+        subject: "New Project Inquiry from Xpeartz Website",
         name: data.name,
-        email: data.email,
-        phone: `${data.countryCode} ${data.phone}`,
-        company: data.company || "Not provided",
         project_type: data.projectType,
         budget: budgetRange,
-        message: data.message
+        message: data.message,
+        botcheck: false
       }
+
+      if (data.email) payload.email = data.email;
+      if (data.phone) payload.phone = `${data.countryCode} ${data.phone}`;
+      if (data.company) payload.company = data.company;
 
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
