@@ -7,6 +7,8 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Slider } from "@/components/base/slider/slider"
+import { db } from '@/lib/firebase'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 
 const countryOptions = [
   { code: '+91', label: 'IN (+91)', placeholder: '98765 43210' },
@@ -79,6 +81,27 @@ export default function LeadGenModal({ isOpen, onClose }: LeadGenModalProps) {
     setSubmitError(null)
     try {
       const budgetRange = `$${data.budget[0]} - ${data.budget[1] === 1000 ? '$1,000+' : `$${data.budget[1]}`}`
+      
+      const formData = {
+        name: data.name,
+        email: data.email || null,
+        phone: `${data.countryCode} ${data.phone}`,
+        company: data.company || null,
+        projectType: data.projectType,
+        budget: {
+          min: data.budget[0],
+          max: data.budget[1] === 1000 ? 1000 : data.budget[1],
+          isMaximum: data.budget[1] === 1000
+        },
+        message: data.message,
+        createdAt: serverTimestamp(),
+        source: 'modal_strategy_call'
+      }
+
+      // 1. Save to Firestore
+      await addDoc(collection(db, 'leads'), formData)
+
+      // 2. Send Email via Web3Forms (Backup/Notification)
       
       const payload = {
         access_key: "32a8b85a-6718-452b-9aa8-af7944b20bbd",
