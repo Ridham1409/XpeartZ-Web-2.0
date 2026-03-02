@@ -1,6 +1,6 @@
 "use client"
 
-import { CheckCircle2, Zap, Monitor, Smartphone, Layers, BarChart2, Repeat, Box, Blocks, Rocket, Palette, RefreshCw, Clock, Code2, ShieldCheck, Infinity as InfinityIcon, User, Calendar, Play } from 'lucide-react'
+import { CheckCircle2, Zap, Monitor, Smartphone, Layers, BarChart2, Repeat, Box, Blocks, Rocket, Palette, RefreshCw, Clock, Code2, ShieldCheck, Infinity as InfinityIcon, User, Calendar, Play, Lightbulb, ThumbsUp, ShoppingCart, Facebook, Target, PenTool } from 'lucide-react'
 import SectionReveal from '@/components/ui/SectionReveal'
 import Button from '@/components/ui/Button'
 import SpotlightCards from '@/components/ui/SpotlightCards'
@@ -59,32 +59,68 @@ const tiers = [
 
 const serviceDetails = [
   {
-    id: 'web',
+    id: 'seo',
+    icon: <Lightbulb size={24} />,
+    smallIcon: <Lightbulb size={18} strokeWidth={1.9} color="#34d399" />,
+    color: "#34d399",
+    title: 'Search Engine Optimization',
+    desc: 'SEO, or search engine optimization, assists your website in improving its search engine ranking, increasing traffic, and increasing its earning potential. Our expert team develops marketing strategies that make it easier to achieve the best results.',
+  },
+  {
+    id: 'smm',
+    icon: <ThumbsUp size={24} />,
+    smallIcon: <ThumbsUp size={18} strokeWidth={1.9} color="#ef4444" />,
+    color: "#ef4444",
+    title: 'Social Media Marketing',
+    desc: 'SMM helps you create your brand identity. With the help of social media platforms, you can promote your products or services. Our team ensures a noticeable presence on major channels and helps your business grow exponentially.',
+  },
+  {
+    id: 'web-dev',
     icon: <Monitor size={24} />,
-    title: 'Web Design & Development',
-    desc: 'We design and build high-performance websites that convert visitors into loyal customers. From marketing sites to complex web apps — we handle the full stack.',
-    benefits: ['Strategy-led UX design', 'Next.js / React development', 'CMS integration', 'SEO & performance optimization'],
+    smallIcon: <Monitor size={18} strokeWidth={1.9} color="#a855f7" />,
+    color: "#a855f7",
+    title: 'Professional Website Development',
+    desc: 'A website is an online presence that represents the corporate identity and existence of your business. Our web expert team crafts beautiful responsive designs using the latest innovative technologies to help grow your business.',
   },
   {
-    id: 'brand',
-    icon: <Layers size={24} />,
-    title: 'Brand Identity',
-    desc: 'Your brand is the first impression. We craft comprehensive visual identities that communicate your values, differentiate you from competitors, and build lasting recognition.',
-    benefits: ['Logo & wordmark design', 'Color & typography system', 'Brand guidelines', 'Print & digital assets'],
+    id: 'ecommerce',
+    icon: <ShoppingCart size={24} />,
+    smallIcon: <ShoppingCart size={18} strokeWidth={1.9} color="#f97316" />,
+    color: "#f97316",
+    title: 'eCommerce Website Development',
+    desc: 'Ecommerce websites allow you to sell products or services online, boosting your existing business and earning potential. Our experts deliver innovative, powerful, and robust eCommerce stores that exceed expectations.',
   },
   {
-    id: 'mobile',
-    icon: <Smartphone size={24} />,
-    title: 'Mobile UI Design',
-    desc: 'Premium mobile experiences that feel native and intuitive on iOS and Android. We handle everything from concept to developer-ready Figma deliverables.',
-    benefits: ['iOS & Android UI', 'Prototype & micro-interactions', 'Accessibility compliance', 'Design handoff'],
+    id: 'fb-ads',
+    icon: <Facebook size={24} />,
+    smallIcon: <Facebook size={18} strokeWidth={1.9} color="#3b82f6" />,
+    color: "#3b82f6",
+    title: 'Facebook ADS',
+    desc: 'Xpeartz offers innovative Facebook ad campaign services at an affordable cost. Our strategic campaign ad plan increases your ROI and traffic with organic and paid ads that achieve the best results for your business.',
   },
   {
-    id: 'systems',
-    icon: <Repeat size={24} />,
-    title: 'Design Systems',
-    desc: 'Scalable, consistent design languages that power fast product growth. We build component libraries and documentation that entire teams use confidently.',
-    benefits: ['Figma component library', 'Storybook integration', 'Token documentation', 'Team onboarding'],
+    id: 'google-ads',
+    icon: <Target size={24} />,
+    smallIcon: <Target size={18} strokeWidth={1.9} color="#ef4444" />,
+    color: "#ef4444",
+    title: 'Google ADS',
+    desc: 'Drive traffic to your website and increase your revenue with Google Ads. Our experts develop effective PPC campaigns which help eager buyers find your store. Our expertise will help you achieve the best results.',
+  },
+  {
+    id: 'logo',
+    icon: <InfinityIcon size={24} />,
+    smallIcon: <InfinityIcon size={18} strokeWidth={1.9} color="#ec4899" />,
+    color: "#ec4899",
+    title: 'Logo Designs',
+    desc: 'Every business needs a corporate identity which perfectly appeals to your prospects. Our highly skilled designer team gives you a stylish and trendy logo. We create designs from the client\'s perspective and requirements.',
+  },
+  {
+    id: 'graphic',
+    icon: <PenTool size={24} />,
+    smallIcon: <PenTool size={18} strokeWidth={1.9} color="#14b8a6" />,
+    color: "#14b8a6",
+    title: 'Graphic Designs',
+    desc: 'Xpeartz is a creative agency offering comprehensive graphic design services. We provide complete designing solutions including corporate identity (logo), website designs, flyers, brochures, newsletters, business cards, and more.',
   },
 ]
 
@@ -112,14 +148,11 @@ export default function ServicesPage() {
           <SpotlightCards
             heading="Our Core Capabilities"
             eyebrow="What We Do"
-            items={serviceDetails.map((s, i) => ({
+            items={serviceDetails.map((s) => ({
               title: s.title,
-              description: s.desc + "\n\nIncludes:\n" + s.benefits.join(" • "),
-              icon: i === 0 ? <Monitor size={18} strokeWidth={1.9} color="#4A4AFF" /> : 
-                    i === 1 ? <Layers size={18} strokeWidth={1.9} color="#CC44BB" /> : 
-                    i === 2 ? <Smartphone size={18} strokeWidth={1.9} color="#EFCB68" /> : 
-                    <Repeat size={18} strokeWidth={1.9} color="#34d399" />,
-              color: i === 0 ? "#4A4AFF" : i === 1 ? "#CC44BB" : i === 2 ? "#EFCB68" : "#34d399"
+              description: s.desc,
+              icon: s.smallIcon,
+              color: s.color
             }))}
             className="!px-0 !bg-transparent"
           />
