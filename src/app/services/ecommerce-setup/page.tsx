@@ -194,7 +194,7 @@ export default function EcommerceSetupPage() {
               Ready to Launch Your Online Store?
             </h2>
             <p className="text-[#A0A0A0] text-lg mb-10 max-w-xl mx-auto">
-              Partner with ecommerce experts who understand that your website's primary job is to generate revenue.
+              Partner with ecommerce experts who understand that your website&apos;s primary job is to generate revenue.
             </p>
             <button
               onClick={() => setIsModalOpen(true)}

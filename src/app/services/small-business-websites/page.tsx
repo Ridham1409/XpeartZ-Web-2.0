@@ -131,7 +131,7 @@ export default function SmallBusinessWebsitesPage() {
                   Why A Professional Website Matters
                 </h2>
                 <p className="text-[#A0A0A0] mb-8 leading-relaxed">
-                  Your website is your 24/7 salesperson. If it is slow, confusing, or doesn't rank on Google, you are losing money to your competitors every single day. We build digital assets that pay for themselves.
+                  Your website is your 24/7 salesperson. If it is slow, confusing, or doesn&apos;t rank on Google, you are losing money to your competitors every single day. We build digital assets that pay for themselves.
                 </p>
                 <div className="grid sm:grid-cols-2 gap-4">
                   {benefits.map((b) => (
@@ -147,7 +147,7 @@ export default function SmallBusinessWebsitesPage() {
                  <div className="p-8 rounded-2xl bg-[#1A1A1E] border border-[#2A2A2E]">
                     <h3 className="text-xl font-bold text-[#F7F7F7] mb-4">Our Guarantee</h3>
                     <p className="text-[#A0A0A0] text-sm leading-relaxed mb-6">
-                      We don't just hand over a pretty design. We deliver a fully functional, SEO-optimized business tool designed to capture leads and drive growth. 
+                      We don&apos;t just hand over a pretty design. We deliver a fully functional, SEO-optimized business tool designed to capture leads and drive growth. 
                     </p>
                     <button
                       onClick={() => setIsModalOpen(true)}
