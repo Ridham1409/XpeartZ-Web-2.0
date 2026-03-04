@@ -19,6 +19,10 @@ import {
   Palette,
   Code2,
   Star,
+  CheckCircle2,
+  XCircle,
+  TrendingUp,
+  Target
 } from "lucide-react";
 import SectionReveal from "@/components/ui/SectionReveal";
 import { ProjectCard } from "@/components/ui/Card";
@@ -27,32 +31,55 @@ import SpotlightCards from "@/components/ui/SpotlightCards";
 import LeadGenModal from "@/components/ui/LeadGenModal";
 
 const benefits = [
-  "Professional Digital Solutions Built for Growth",
-  "UX Focused Design That Converts",
-  "Custom Interfaces for Web & Mobile",
-  "Strategic Brand + Identity Expertise",
+  "Fast modern websites (Next.js)",
+  "Mobile-first design",
+  "SEO-optimized structure",
+  "Conversion-focused layouts",
 ];
 
 const services = [
   {
     icon: <Code2 size={22} />,
-    title: "Web & App Experiences",
-    desc: "Crafting responsive websites and mobile UI that convert visitors into customers.",
-  },
-  {
-    icon: <Palette size={22} />,
-    title: "Brand Strategy & Identity",
-    desc: "Strategic brand systems and visual identities that build authority and trust.",
+    title: "Website Development",
+    desc: "Lightning-fast, mobile-first websites built on modern tech stacks like Next.js.",
   },
   {
     icon: <Zap size={22} />,
-    title: "UI/UX & Product Design",
-    desc: "User-centered interfaces and optimized digital experiences that delight users.",
+    title: "Ecommerce Setup",
+    desc: "High-converting online stores that turn visitors into paying customers.",
   },
   {
-    icon: <ArrowUpRight size={22} />,
-    title: "Digital Growth & Support",
-    desc: "SEO strategy, performance analytics, and ongoing optimization for measurable growth.",
+    icon: <Palette size={22} />,
+    title: "UI/UX Design",
+    desc: "User-centered interfaces designed for seamless navigation and engagement.",
+  },
+  {
+    icon: <TrendingUp size={22} />,
+    title: "Conversion Optimization",
+    desc: "Data-driven strategies to maximize leads, sales, and overall business growth.",
+  },
+];
+
+const processSteps = [
+  {
+    step: "01",
+    title: "Strategy",
+    desc: "We analyze your business, audience, and goals to create a winning digital roadmap.",
+  },
+  {
+    step: "02",
+    title: "Design",
+    desc: "Crafting premium user experiences with mobile-first and conversion-focused layouts.",
+  },
+  {
+    step: "03",
+    title: "Development",
+    desc: "Building fast, secure, and SEO-optimized platforms using cutting-edge technology.",
+  },
+  {
+    step: "04",
+    title: "Launch & Growth",
+    desc: "Deploying your site and scaling your presence with ongoing optimization and support.",
   },
 ];
 
@@ -198,39 +225,18 @@ export default function HomePage() {
             style={{ opacity: heroOpacity, y: heroY }}
             className="flex flex-col items-center text-center max-w-4xl mx-auto w-full"
           >
-            {/* Animated intro tagline */}
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-[#4A4AFF] text-sm font-semibold tracking-widest uppercase mb-4"
-            >
-              Premium Digital Studio for Modern Brands
-            </motion.p>
+            {/* Empty block to preserve padding structure removed */}
 
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.05 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1A1A1E] border border-[#2A2A2E] text-[#F7F7F7] text-sm font-medium shadow-[0_4px_24px_rgba(0,0,0,0.2)] mb-6"
-            >
-              <span className="w-2 h-2 rounded-full bg-[#4A4AFF] animate-pulse" />
-              Premium Digital Agency — Est. 2026
-            </motion.div>
 
             {/* Headline */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="font-heading text-6xl sm:text-7xl xl:text-[84px] font-bold text-[#F7F7F7] leading-[1.05] tracking-tight mb-8"
+              className="font-heading text-5xl sm:text-6xl xl:text-[76px] font-bold text-[#F7F7F7] leading-[1.05] tracking-tight mb-8"
             >
-              The{" "}
-              <span className="text-gradient-blue">Best Freelance Agency</span>
-              <br className="hidden sm:block" />
-              for <span className="text-gradient-gold">World-Class</span>{" "}
-              Websites
+              <span className="text-gradient-blue">Website Development</span> &amp; 
+              <br className="hidden lg:block" /> Digital Growth Solutions <br className="hidden lg:block" /> for <span className="text-gradient-gold">Small Businesses</span>
             </motion.h1>
 
             {/* Subheading */}
@@ -240,9 +246,7 @@ export default function HomePage() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="text-[#A0A0A0] text-lg sm:text-xl leading-relaxed max-w-2xl mb-12"
             >
-              As a premium website maker, we build high-impact digital
-              experiences and strategic branding that drive results — helping
-              your brand rank #1.
+              We design high-converting websites, ecommerce stores, and digital systems that help small businesses grow online.
             </motion.p>
 
             {/* CTAs */}
@@ -258,7 +262,7 @@ export default function HomePage() {
                 onTouchStart={(e) => e.stopPropagation()}
                 className="group inline-flex items-center gap-2 px-7 py-3.5 bg-[#4A4AFF] text-white font-medium rounded-xl hover:bg-[#3B3BDD] hover:shadow-[0_0_30px_rgba(74,74,255,0.4)] transition-all duration-300 relative z-50"
               >
-                Get a <span className="text-[#EFCB68]">Free</span> Strategy Call
+                Start a Project
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </button>
               <Link
@@ -268,28 +272,12 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[200%] group-hover:animate-[shimmer_2s_infinite]" />
                 <span className="relative flex items-center gap-2">
                   <Star size={16} className="text-[#EFCB68] fill-[#EFCB68]" />
-                  Customize your own design
+                  View Our Work
                 </span>
               </Link>
             </motion.div>
 
-            {/* Benefits list */}
-            <motion.ul
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.5 }}
-              className="flex flex-wrap justify-center gap-6 md:gap-8 pt-8 border-t border-[#2A2A2E] w-full max-w-3xl"
-            >
-              {benefits.map((b) => (
-                <li
-                  key={b}
-                  className="flex items-center gap-2.5 text-[#A0A0A0] text-sm md:text-base"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#4A4AFF] shrink-0" />
-                  {b}
-                </li>
-              ))}
-            </motion.ul>
+
           </motion.div>
         </div>
 
@@ -358,6 +346,32 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ═══════════ PROOF SECTION ═══════════ */}
+      <section className="section-padding border-t border-[#2A2A2E]">
+        <div className="container-wide">
+          <SectionReveal>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-10">
+              <div className="max-w-xl">
+                <span className="text-[#34d399] text-sm font-medium tracking-widest uppercase mb-3 block">
+                  Why Businesses Choose Xpeartz
+                </span>
+                <h2 className="font-heading text-4xl lg:text-5xl font-bold text-[#F7F7F7] tracking-tight mb-6">
+                  Built for Speed, Scale, and Higher Conversions
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-4 mt-8">
+                  {benefits.map((b) => (
+                    <div key={b} className="flex items-center gap-3">
+                      <CheckCircle2 className="text-[#34d399] shrink-0" size={20} />
+                      <span className="text-[#F7F7F7]">{b}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </SectionReveal>
+        </div>
+      </section>
+
       {/* ═══════════ FEATURED WORK ═══════════ */}
       <section className="section-padding border-t border-[#2A2A2E]">
         <div className="container-wide">
@@ -420,6 +434,35 @@ export default function HomePage() {
               </motion.li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* ═══════════ PROCESS SECTION ═══════════ */}
+      <section className="section-padding border-t border-[#2A2A2E]">
+        <div className="container-wide">
+          <SectionReveal>
+            <div className="text-center max-w-2xl mx-auto mb-16">
+              <span className="text-[#EFCB68] text-sm font-medium tracking-widest uppercase block mb-3">
+                Our Process
+              </span>
+              <h2 className="font-heading text-4xl lg:text-5xl font-bold text-[#F7F7F7] tracking-tight">
+                How We Build Your Online Presence
+              </h2>
+            </div>
+            
+            <div className="grid md:grid-cols-4 gap-6 relative">
+              <div className="hidden md:block absolute top-[45px] left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-[#4A4AFF]/0 via-[#4A4AFF]/50 to-[#4A4AFF]/0 z-0" />
+              {processSteps.map((step) => (
+                <div key={step.step} className="relative z-10 flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-full bg-[#1A1A1E] border border-[#2A2A2E] flex items-center justify-center font-heading text-xl font-bold text-[#4A4AFF] mb-6 shadow-[0_0_15px_rgba(74,74,255,0.1)]">
+                    {step.step}
+                  </div>
+                  <h3 className="text-xl font-bold text-[#F7F7F7] mb-3">{step.title}</h3>
+                  <p className="text-[#A0A0A0] text-sm leading-relaxed">{step.desc}</p>
+                </div>
+              ))}
+            </div>
+          </SectionReveal>
         </div>
       </section>
 
@@ -503,7 +546,7 @@ export default function HomePage() {
 
               <div className="relative text-center max-w-2xl mx-auto z-10">
                 <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-[#F7F7F7] tracking-tight mb-4">
-                  Ready to build something remarkable?
+                  Ready to Build Your Website?
                 </h2>
                 <p className="text-[#CC44BB] text-base font-medium mb-4">
                   Partner with an agency that treats your brand like its own.
@@ -513,18 +556,12 @@ export default function HomePage() {
                   drive conversions, and accelerate your business growth.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <Link
-                    href="/contact"
-                    className="inline-flex items-center gap-2 px-8 py-4 bg-[#4A4AFF] text-white font-medium rounded-xl hover:bg-[#3B3BDD] hover:shadow-[0_0_30px_rgba(74,74,255,0.5)] transition-all duration-300 text-base"
-                  >
-                    Start a Project
-                    <ArrowRight size={16} />
-                  </Link>
                   <button
                     onClick={() => setIsModalOpen(true)}
-                    className="inline-flex items-center gap-2 px-8 py-4 border border-[#2A2A2E] text-[#F7F7F7] font-medium rounded-xl hover:border-[#4A4AFF]/50 transition-all duration-300 text-base"
+                    className="inline-flex items-center gap-2 px-8 py-4 bg-[#4A4AFF] text-white font-medium rounded-xl hover:bg-[#3B3BDD] hover:shadow-[0_0_30px_rgba(74,74,255,0.5)] transition-all duration-300 text-base"
                   >
-                    Get a Free Strategy Call
+                    Start Your Project
+                    <ArrowRight size={16} />
                   </button>
                 </div>
               </div>

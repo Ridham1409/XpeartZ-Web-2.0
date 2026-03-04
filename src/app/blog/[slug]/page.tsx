@@ -5,6 +5,7 @@ import { blogPosts } from '@/lib/blog-data'
 import SectionReveal from '@/components/ui/SectionReveal'
 import { ArrowLeft, ArrowRight, Tag, Calendar, User, Clock } from 'lucide-react'
 import { blogContent } from '@/lib/blog-content'
+import Image from 'next/image'
 
 // Generate static routes for all 50 blog posts at build time
 export function generateStaticParams() {
@@ -25,7 +26,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 
   const hasContent = !!blogContent[post.slug];
 
-  return {
+  const metadata: Metadata = {
     title: post.title,
     description: post.excerpt,
     keywords: post.keyword.split(' '),
@@ -43,6 +44,19 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
       follow: true,
     }
   }
+  
+  if (post.image) {
+    metadata.openGraph!.images = [
+      {
+        url: post.image,
+        width: 1200,
+        height: 630,
+        alt: post.title,
+      }
+    ];
+  }
+
+  return metadata;
 }
 
 export default function BlogPost({ params }: { params: { slug: string } }) {
@@ -75,6 +89,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
       '@type': 'WebPage',
       '@id': `https://xpeartz.com/blog/${post.slug}`,
     },
+    image: post.image ? [post.image] : [],
   };
 
   return (
@@ -103,7 +118,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
                 <Calendar size={14} /> {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric'})}
               </span>
               <span className="text-[#8A8A8C] text-sm flex items-center gap-1.5 hidden sm:flex">
-                <Clock size={14} /> 5 min read
+                <Clock size={14} /> {post.readingTime || '5 min read'}
               </span>
             </div>
 
@@ -111,9 +126,21 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
               {post.title}
             </h1>
             
-            <p className="text-xl text-[#A0A0A0] leading-relaxed font-light">
+            <p className="text-xl text-[#A0A0A0] leading-relaxed font-light mb-10">
               {post.excerpt}
             </p>
+
+            {post.image && (
+              <div className="relative w-full aspect-[16/9] md:aspect-[21/9] rounded-3xl overflow-hidden mb-10 border border-[#2A2A2E]">
+                <Image 
+                  src={post.image}
+                  alt={post.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            )}
 
             <div className="flex items-center gap-3 mt-8">
               <div className="w-10 h-10 rounded-full bg-[#1A1A1E] border border-[#2A2A2E] flex items-center justify-center text-[#4A4AFF]">

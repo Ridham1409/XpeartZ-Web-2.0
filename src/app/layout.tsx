@@ -24,8 +24,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Best Agency for Website Development and Design | Xpeartz',
-    template: '%s | Xpeartz — Best Agency for Website Development',
+    default: 'Website Development Agency for Growing Businesses | Xpeartz',
+    template: '%s | Xpeartz — Website Development Agency',
   },
   description: 'Looking for the best agency for website development and design? Xpeartz crafts world-class, premium, and lead-generating websites for start-ups and enterprises globally.',
   keywords: [
@@ -54,8 +54,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://xpeartz.com',
     siteName: 'Xpeartz',
-    title: 'Best Agency for Website Development and Design | Xpeartz',
-    description: 'Looking for the best agency for website development and design? Elevate your brand with world-class digital experiences and lead-generating websites.',
+    title: 'Website Development Agency for Growing Businesses | Xpeartz',
+    description: 'Looking for a website development agency? Elevate your small business with high-converting, world-class digital experiences.',
     images: [
       {
         url: '/og-image.png',
@@ -67,8 +67,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Best Agency for Website Development and Design | Xpeartz',
-    description: 'Looking for the best agency for website development and design? Crafting exceptional digital experiences.',
+    title: 'Website Development Agency for Growing Businesses | Xpeartz',
+    description: 'Looking for a website development agency? Crafting exceptional digital experiences for growing businesses.',
     images: ['/og-image.png'],
   },
   robots: {
