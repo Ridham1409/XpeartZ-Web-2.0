@@ -29,6 +29,8 @@ import { ProjectCard } from "@/components/ui/Card";
 import { projects } from "@/lib/projects";
 import SpotlightCards from "@/components/ui/SpotlightCards";
 import LeadGenModal from "@/components/ui/LeadGenModal";
+import TrustBanner from "@/components/ui/TrustBanner";
+import StatsBlock from "@/components/ui/StatsBlock";
 
 const benefits = [
   "Fast modern websites (Next.js)",
@@ -235,8 +237,8 @@ export default function HomePage() {
               transition={{ duration: 0.7, delay: 0.1 }}
               className="font-heading text-5xl sm:text-6xl xl:text-[76px] font-bold text-[#F7F7F7] leading-[1.05] tracking-tight mb-8"
             >
-              <span className="text-gradient-blue">Website Development</span> &amp; 
-              <br className="hidden lg:block" /> Digital Growth Solutions <br className="hidden lg:block" /> for <span className="text-gradient-gold">Small Businesses</span>
+              <span className="text-gradient-blue">SEO-Optimized</span> Websites
+              <br className="hidden lg:block" /> That Generate Leads <br className="hidden lg:block" /> for <span className="text-gradient-gold">Small Businesses</span>
             </motion.h1>
 
             {/* Subheading */}
@@ -246,7 +248,7 @@ export default function HomePage() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="text-[#A0A0A0] text-lg sm:text-xl leading-relaxed max-w-2xl mb-12"
             >
-              We design high-converting websites, ecommerce stores, and digital systems that help small businesses grow online.
+              We design and build high-converting websites, ecommerce stores, and digital systems that turn traffic into paying clients.
             </motion.p>
 
             {/* CTAs */}
@@ -289,6 +291,9 @@ export default function HomePage() {
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         ></motion.div>
       </section>
+
+      {/* ═══════════ TRUST BANNER ═══════════ */}
+      <TrustBanner />
 
       {/* ═══════════ SERVICES PREVIEW ═══════════ */}
       <section className="section-padding border-t border-[#2A2A2E]">
@@ -488,31 +493,33 @@ export default function HomePage() {
           <div className="grid md:grid-cols-3 gap-5">
             {testimonials.map((t, i) => (
               <SectionReveal key={t.author} delay={i * 0.1}>
-                <div className="p-7 rounded-2xl border border-[#2A2A2E] bg-[#1A1A1E]">
-                  <div className="flex gap-0.5 mb-5">
-                    {Array.from({ length: t.rating }).map((_, j) => (
+                <div className="p-6 md:p-8 rounded-2xl border border-[#2A2A2E] bg-[#1A1A1E] hover:border-[#4A4AFF]/40 transition-colors h-full flex flex-col relative overflow-hidden group">
+                  <div className="absolute top-6 right-6 font-bold text-lg flex items-center gap-[1px]">
+                     <span className="text-[#4285F4]">G</span>
+                  </div>
+                  <div className="flex flex-col mb-4">
+                     <span className="text-[#F7F7F7] font-medium text-base leading-tight block">{t.author}</span>
+                     <span className="text-[#A0A0A0] text-xs">4 months ago</span>
+                  </div>
+                  <div className="flex items-center gap-1 mb-4">
+                    {Array.from({ length: 5 }).map((_, j) => (
                       <Star
                         key={j}
                         size={14}
-                        fill="#CC44BB"
-                        className="text-[#CC44BB]"
+                        fill="#FBBC05"
+                        className="text-[#FBBC05]"
                       />
                     ))}
+                    <div className="w-3.5 h-3.5 rounded-full bg-[#4285F4] flex items-center justify-center ml-1">
+                      <CheckCircle2 size={10} color="#fff" />
+                    </div>
                   </div>
-                  <p className="text-[#F7F7F7] text-sm leading-relaxed mb-6">
-                    &ldquo;{t.quote}&rdquo;
+                  <p className="text-[#F7F7F7] text-sm leading-relaxed mb-4 flex-1">
+                    {t.quote}
                   </p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-[#4A4AFF]/20 flex items-center justify-center text-[#4A4AFF] font-heading font-bold text-sm">
-                      {t.author[0]}
-                    </div>
-                    <div>
-                      <div className="text-[#F7F7F7] text-sm font-medium">
-                        {t.author}
-                      </div>
-                      <div className="text-[#A0A0A0] text-xs">{t.role}</div>
-                    </div>
-                  </div>
+                  <button className="text-[#A0A0A0] text-xs hover:text-[#F7F7F7] transition-colors self-start mt-auto">
+                     Read more
+                  </button>
                 </div>
               </SectionReveal>
             ))}
@@ -521,51 +528,50 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════ CTA BANNER ═══════════ */}
-      <section className="section-padding border-t border-[#2A2A2E]">
+      <section className="section-padding py-20 border-t border-[#2A2A2E]">
         <div className="container-wide">
           <SectionReveal>
-            <motion.div
-              ref={ctaRef}
-              onMouseMove={handleCtaMouseMove}
-              onMouseLeave={() => {
-                normX.set(0.5);
-                normY.set(0.5);
-              }}
-              style={{ rotateX, rotateY, transformPerspective: 1200 }}
-              className="group relative rounded-3xl overflow-hidden p-10 md:p-16 lg:p-20 bg-[#1A1A1E] border border-[#2A2A2E] transition-[border-color] duration-300 hover:border-[#4A4AFF]/40"
-            >
-              {/* Shimmer sweep */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-y-0 left-0 w-[55%] -translate-x-full -skew-x-12 bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-1000 ease-out group-hover:translate-x-[280%]"
-              />
-
-              {/* Background */}
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(74,74,255,0.15)_0%,transparent_70%)] pointer-events-none" />
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_40%_at_85%_80%,rgba(239,203,104,0.1)_0%,transparent_70%)] pointer-events-none" />
-
-              <div className="relative text-center max-w-2xl mx-auto z-10">
-                <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-[#F7F7F7] tracking-tight mb-4">
-                  Ready to Build Your Website?
-                </h2>
-                <p className="text-[#CC44BB] text-base font-medium mb-4">
-                  Partner with an agency that treats your brand like its own.
-                </p>
-                <p className="text-[#A0A0A0] text-lg mb-10 leading-relaxed">
-                  Let&apos;s create digital experiences that elevate your brand,
-                  drive conversions, and accelerate your business growth.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="flex flex-col items-center w-full max-w-6xl mx-auto">
+               
+               {/* Contact Banner Pill */}
+               <div className="w-full max-w-4xl bg-[#1A1A1E] border border-[#2A2A2E] rounded-full p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl mb-16 px-6 md:px-10">
+                  <div className="flex items-center gap-4">
+                     <div className="w-12 h-12 rounded-full bg-[#4A4AFF]/20 flex items-center justify-center shrink-0">
+                        <Zap size={20} className="text-[#4A4AFF]" />
+                     </div>
+                     <div>
+                        <h3 className="text-[#F7F7F7] font-heading font-bold text-xl md:text-2xl mb-1">Want To Scale Your Business With Confidence?</h3>
+                        <p className="text-[#A0A0A0] text-sm">Reach out to Xpeartz — your growth journey begins now.</p>
+                     </div>
+                  </div>
                   <button
                     onClick={() => setIsModalOpen(true)}
-                    className="inline-flex items-center gap-2 px-8 py-4 bg-[#4A4AFF] text-white font-medium rounded-xl hover:bg-[#3B3BDD] hover:shadow-[0_0_30px_rgba(74,74,255,0.5)] transition-all duration-300 text-base"
+                    className="shrink-0 px-8 py-3.5 bg-[#4A4AFF] text-white font-medium rounded-full hover:bg-[#3B3BDD] transition-colors whitespace-nowrap"
                   >
-                    Start Your Project
-                    <ArrowRight size={16} />
+                    Contact Us
                   </button>
-                </div>
-              </div>
-            </motion.div>
+               </div>
+
+               {/* Avatars */}
+               <div className="flex justify-center -space-x-4 mb-10 overflow-hidden relative">
+                 <div className="w-20 h-20 rounded-full bg-[#8B8BFF]/20 border-4 border-[#0F0F11] flex flex-col items-center justify-center overflow-hidden z-10">
+                    <div className="text-3xl filter invert">👨‍💻</div>
+                 </div>
+                 <div className="w-24 h-24 rounded-full bg-[#CC44BB]/20 border-4 border-[#0F0F11] flex flex-col items-center justify-center overflow-hidden z-20 -mt-2 shadow-[0_0_30px_rgba(204,68,187,0.3)]">
+                    <div className="flex absolute top-2"><Star size={12} fill="#EFCB68" color="#EFCB68"/><Star size={12} fill="#EFCB68" color="#EFCB68"/><Star size={12} fill="#EFCB68" color="#EFCB68"/><Star size={12} fill="#EFCB68" color="#EFCB68"/><Star size={12} fill="#EFCB68" color="#EFCB68"/></div>
+                    <div className="text-4xl filter invert mt-3">👩‍💼</div>
+                 </div>
+                 <div className="w-20 h-20 rounded-full bg-[#34d399]/20 border-4 border-[#0F0F11] flex flex-col items-center justify-center overflow-hidden z-10">
+                    <div className="text-3xl filter invert">🧗‍♂️</div>
+                 </div>
+               </div>
+
+               <h2 className="font-heading text-3xl md:text-5xl lg:text-5xl font-bold text-[#F7F7F7] text-center tracking-tight mb-2 max-w-3xl leading-[1.2]">
+                 Our Work Speaks Through The Measurable Success Our Clients Achieve.
+               </h2>
+
+               <StatsBlock />
+            </div>
           </SectionReveal>
         </div>
       </section>

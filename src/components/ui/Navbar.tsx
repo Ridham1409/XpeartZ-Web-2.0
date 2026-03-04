@@ -72,77 +72,90 @@ export default function Navbar() {
             }}
           />
 
-          {/* Logo — CSS filter removes white bg, preserves gradient */}
-          <Link href="/" className="flex items-center shrink-0 relative z-10" data-no-cursor="true">
-            <Image
-              src="/logo.png"
-              alt="Xpeartz"
-              width={150}
-              height={44}
-              className="object-contain block"
-              priority
-            />
-          </Link>
+          {/* Left — Contact Details */}
+          <div className="hidden lg:flex items-center gap-4 shrink-0 relative z-10 mr-4">
+            <a href="tel:+919876543210" className="text-[#A0A0A0] hover:text-[#F7F7F7] text-xs font-medium transition-colors flex items-center gap-1.5">
+              <span>+91 98765 43210</span>
+            </a>
+            <div className="w-1 h-1 rounded-full bg-[#2A2A2E]" />
+            <a href="mailto:ridhambhavnagariya@gmail.com" className="text-[#A0A0A0] hover:text-[#F7F7F7] text-xs font-medium transition-colors flex items-center gap-1.5">
+              <span>ridhambhavnagariya@gmail.com</span>
+            </a>
+          </div>
 
-          {/* Center — desktop nav links */}
-          <nav className="hidden md:flex items-center gap-0.5 absolute left-1/2 -translate-x-1/2 z-10">
-            {navLinks.map((link, i) => (
+          <div className="flex-1 flex items-center justify-between lg:justify-center relative z-10 w-full">
+            {/* Logo — CSS filter removes white bg, preserves gradient */}
+            <Link href="/" className="flex items-center shrink-0 relative z-10 lg:absolute lg:left-0" data-no-cursor="true">
+              <Image
+                src="/logo.png"
+                alt="Xpeartz"
+                width={130}
+                height={38}
+                className="object-contain block"
+                priority
+              />
+            </Link>
+
+            {/* Center — desktop nav links */}
+            <nav className="hidden md:flex items-center gap-0.5 relative z-10">
+              {navLinks.map((link, i) => (
+                <motion.div
+                  key={link.href}
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + i * 0.06, duration: 0.35, ease: 'easeOut' }}
+                >
+                  <Link
+                    href={link.href}
+                    className={cn(
+                      'relative px-4 py-2.5 rounded-full text-base font-medium transition-all duration-250 whitespace-nowrap',
+                      pathname === link.href
+                        ? 'text-[#F7F7F7]'
+                        : 'text-[#8A8A8A] hover:text-[#D4D4D4]'
+                    )}
+                  >
+                    {/* Active pill indicator */}
+                    {pathname === link.href && (
+                      <motion.span
+                        layoutId="nav-active"
+                        className="absolute inset-0 rounded-full bg-white/10"
+                        transition={{ type: 'spring', stiffness: 380, damping: 34 }}
+                      />
+                    )}
+                    <span className="relative z-10">{link.label}</span>
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
+
+            {/* Right — CTA + mobile toggle */}
+            <div className="flex items-center gap-3 shrink-0 relative z-10 lg:absolute lg:right-0">
+              {/* Desktop CTA — white pill */}
               <motion.div
-                key={link.href}
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.06, duration: 0.35, ease: 'easeOut' }}
+                initial={{ opacity: 0, scale: 0.88 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.45, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               >
                 <Link
-                  href={link.href}
-                  className={cn(
-                    'relative px-4 py-2.5 rounded-full text-base font-medium transition-all duration-250 whitespace-nowrap',
-                    pathname === link.href
-                      ? 'text-[#F7F7F7]'
-                      : 'text-[#8A8A8A] hover:text-[#D4D4D4]'
-                  )}
+                  href="/contact"
+                  className="hidden md:inline-flex items-center px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 group"
+                  style={{
+                    background: 'rgba(255,255,255,0.95)',
+                    color: '#0F0F11',
+                    boxShadow: '0 2px 12px rgba(255,255,255,0.15)',
+                  }}
                 >
-                  {/* Active pill indicator */}
-                  {pathname === link.href && (
-                    <motion.span
-                      layoutId="nav-active"
-                      className="absolute inset-0 rounded-full bg-white/10"
-                      transition={{ type: 'spring', stiffness: 380, damping: 34 }}
-                    />
-                  )}
-                  <span className="relative z-10">{link.label}</span>
+                  <span className="group-hover:tracking-wide transition-all duration-300 whitespace-nowrap">
+                    Let&apos;s Talk
+                  </span>
                 </Link>
               </motion.div>
-            ))}
-          </nav>
-
-          {/* Right — CTA + mobile toggle */}
-          <div className="flex items-center gap-3 shrink-0 relative z-10">
-            {/* Desktop CTA — white pill */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.88 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.45, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Link
-                href="/contact"
-                className="hidden md:inline-flex items-center px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 group"
-                style={{
-                  background: 'rgba(255,255,255,0.95)',
-                  color: '#0F0F11',
-                  boxShadow: '0 2px 12px rgba(255,255,255,0.15)',
-                }}
-              >
-                <span className="group-hover:tracking-wide transition-all duration-300">
-                  Let&apos;s Talk
-                </span>
-              </Link>
-            </motion.div>
-
+            </div>
+            
             {/* Mobile toggle */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden p-2 text-[#A0A0A0] hover:text-[#F7F7F7] transition-colors"
+              className="lg:hidden p-2 text-[#A0A0A0] hover:text-[#F7F7F7] transition-colors absolute right-0 z-10"
               aria-label="Toggle menu"
             >
               <AnimatePresence mode="wait" initial={false}>
@@ -157,6 +170,19 @@ export default function Navbar() {
                 </motion.div>
               </AnimatePresence>
             </button>
+          </div>
+
+          {/* Right — Social Media Links */}
+          <div className="hidden lg:flex items-center gap-3 shrink-0 relative z-10 ml-4 pl-4 border-l border-[#2A2A2E]">
+            <a href="https://instagram.com/xpeartz" target="_blank" rel="noopener noreferrer" className="text-[#A0A0A0] hover:text-[#CC44BB] transition-colors" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            </a>
+            <a href="#" className="text-[#A0A0A0] hover:text-[#4A4AFF] transition-colors" aria-label="Facebook">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" className="text-[#A0A0A0] hover:text-[#FF0000] transition-colors" aria-label="YouTube">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+            </a>
           </div>
         </motion.div>
       </div>

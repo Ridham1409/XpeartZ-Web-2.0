@@ -1,6 +1,7 @@
 "use client"
 
-import { CheckCircle2, Zap, Monitor, Smartphone, Layers, BarChart2, Repeat, Box, Blocks, Rocket, Palette, RefreshCw, Clock, Code2, ShieldCheck, Infinity as InfinityIcon, User, Calendar, Play, Lightbulb, ThumbsUp, ShoppingCart, Facebook, Target, PenTool } from 'lucide-react'
+import { CheckCircle2, Zap, Monitor, Smartphone, Layers, BarChart2, Repeat, Box, Blocks, Rocket, Palette, RefreshCw, Clock, Code2, ShieldCheck, Infinity as InfinityIcon, User, Calendar, Play, Lightbulb, ThumbsUp, ShoppingCart, Facebook, Target, PenTool, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 import SectionReveal from '@/components/ui/SectionReveal'
 import Button from '@/components/ui/Button'
 import SpotlightCards from '@/components/ui/SpotlightCards'
@@ -138,6 +139,43 @@ export default function ServicesPage() {
             <p className="text-[#A0A0A0] text-lg leading-relaxed max-w-2xl">
               From brand strategy to pixel-perfect interfaces — we offer end-to-end design and development services that help ambitious brands grow.
             </p>
+          </SectionReveal>
+        </div>
+      </section>
+
+      {/* Featured Services Funnels */}
+      <section className="section-padding border-t border-[#2A2A2E]">
+        <div className="container-wide">
+          <SectionReveal>
+            <div className="grid md:grid-cols-2 gap-6">
+              <Link href="/services/small-business-websites" className="group block relative overflow-hidden rounded-3xl bg-[#1A1A1E] border border-[#2A2A2E] hover:border-[#4A4AFF]/40 transition-all duration-300 p-8 sm:p-10">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_100%_0%,rgba(74,74,255,0.08)_0%,transparent_80%)] pointer-events-none" />
+                <div className="w-12 h-12 rounded-xl bg-[#4A4AFF]/10 flex items-center justify-center mb-8">
+                  <Monitor size={24} className="text-[#4A4AFF]" />
+                </div>
+                <h3 className="font-heading text-3xl font-bold text-[#F7F7F7] mb-4">Small Business Websites</h3>
+                <p className="text-[#A0A0A0] text-sm leading-relaxed mb-8 max-w-sm">
+                  High-converting, SEO-optimized business websites engineered to turn traffic into qualified leads.
+                </p>
+                <div className="flex items-center gap-2 text-[#4A4AFF] font-medium text-sm">
+                  View Service Details <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
+              
+              <Link href="/services/ecommerce-setup" className="group block relative overflow-hidden rounded-3xl bg-[#1A1A1E] border border-[#2A2A2E] hover:border-[#CC44BB]/40 transition-all duration-300 p-8 sm:p-10">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_100%_0%,rgba(204,68,187,0.08)_0%,transparent_80%)] pointer-events-none" />
+                <div className="w-12 h-12 rounded-xl bg-[#CC44BB]/10 flex items-center justify-center mb-8">
+                  <ShoppingCart size={24} className="text-[#CC44BB]" />
+                </div>
+                <h3 className="font-heading text-3xl font-bold text-[#F7F7F7] mb-4">Ecommerce Setup</h3>
+                <p className="text-[#A0A0A0] text-sm leading-relaxed mb-8 max-w-sm">
+                  Lightning-fast digital storefronts and Etsy setups optimized for maximum sales conversions.
+                </p>
+                <div className="flex items-center gap-2 text-[#CC44BB] font-medium text-sm">
+                  View Service Details <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
+            </div>
           </SectionReveal>
         </div>
       </section>

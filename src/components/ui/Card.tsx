@@ -54,9 +54,17 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             <p className="text-[#A0A0A0] text-sm mt-1 leading-relaxed line-clamp-2">
               {project.subtitle}
             </p>
-            <div className="flex flex-wrap gap-1.5 mt-3">
+            
+            {project.outcome && (
+              <div className="mt-4 p-3 rounded-lg border border-[#34d399]/20 bg-[#34d399]/5">
+                <div className="text-[#34d399] text-[10px] font-bold uppercase tracking-widest mb-1">Result</div>
+                <div className="text-[#F7F7F7] text-sm font-medium line-clamp-2">{project.outcome}</div>
+              </div>
+            )}
+
+            <div className="flex flex-wrap gap-1.5 mt-4">
               {project.tags.slice(0, 3).map(tag => (
-                <span key={tag} className="text-xs px-2 py-0.5 rounded bg-[#2A2A2E] text-[#A0A0A0]">
+                <span key={tag} className="text-[10px] font-medium uppercase tracking-wider px-2 py-1 rounded border border-[#2A2A2E] text-[#A0A0A0] bg-[#1A1A1E]">
                   {tag}
                 </span>
               ))}
